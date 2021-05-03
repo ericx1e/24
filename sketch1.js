@@ -4,10 +4,10 @@ let sketch1 = function(f) {
 
     f.setup = function() {
         canvas = f.createCanvas(600, 700);
-        canvas.position(8, 650);
+        // canvas.position(8, 650); 
         f.background(51);
         f.push();
-        
+
         buttons.push(new ColorButton(25, 25, f.color(0, 0, 0)));
         buttons.push(new ColorButton(100, 25, f.color(255, 100, 100)));
         buttons.push(new ColorButton(175, 25, f.color(255, 150, 100)));
@@ -70,4 +70,4 @@ let sketch1 = function(f) {
         }
     }
 }
-let p5_2 = new p5(sketch1);
+let p5_1 = new p5(sketch1);
