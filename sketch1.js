@@ -13,7 +13,7 @@ let sketch1 = function (f) {
 
     f.setup = function () {
         canvas = f.createCanvas(600, 700);
-        canvas.position(8, 650);
+        // canvas.position(8, 650); 
         f.background(51);
 
         for (let i = 0; i < colors.length; i++) {
@@ -30,6 +30,11 @@ let sketch1 = function (f) {
         weightSlider = f.createSlider(1, 20, 5, 0.5);
         clearButton = f.createButton('clear');
         clearButton.mousePressed(function () { f.background(51) });
+
+        buttons.push(new ColorButton(25, 25, f.color(0, 0, 0)));
+        buttons.push(new ColorButton(100, 25, f.color(255, 100, 100)));
+        buttons.push(new ColorButton(175, 25, f.color(255, 150, 100)));
+        buttons.push(new ColorButton(250, 25, f.color(255, 100, 150)));
     };
 
 
@@ -88,4 +93,4 @@ let sketch1 = function (f) {
         }
     }
 }
-let p5_2 = new p5(sketch1);
+let p5_1 = new p5(sketch1);
