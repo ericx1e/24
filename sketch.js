@@ -1,55 +1,31 @@
-let sketch = function (p) {
-    p.setup = function () {
-        p.createCanvas(500, 500);
 
-    };
+var rover;
 
-    let balls = [];
 
-    p.draw = function () {
-        p.colorMode(p.RGB);
-        p.background(51);
-        for (let i = 0; i < balls.length; i++) {
-            const ball = balls[i];
-            ball.move();
-            ball.show();
-            if (ball.x < -ball.size || ball.x > p.width + ball.size || ball.size <= 0) {
-                balls.splice(i, 1);
-                i--;
-            }
+function setup() {
+    canvas = createCanvas(window.innerWidth, window.innerHeight, WEBGL);
+    canvas.position(0, 0);
 
-        }
-
-    };
-
-    p.mouseDragged = function () {
-        p.noStroke();
-        balls.push(new Ball(p.mouseX, p.mouseY));
-    }
-
-    function Ball(x, y) {
-        this.x = x;
-        this.y = y;
-        this.xv = p.random(-5, 5);
-        this.yv = 0;
-        this.size = 50;
-        this.color = p.color(p.random(0, 255), 255, 255);
-        this.move = function () {
-            this.x += this.xv;
-            this.y += this.yv;
-            this.yv = this.yv + 0.5;
-            this.size -= 0.2;
-            if (this.y + this.size / 2 > p.height) {
-                this.yv = -this.yv * p.random(0.5, 0.9);
-                this.y += this.yv;
-            }
-        }
-        this.show = function () {
-            p.colorMode(p.HSB);
-            p.fill(this.color);
-            p.noStroke();
-            p.ellipse(this.x, this.y, this.size, this.size);
-        }
-    }
+    rover = createRoverCam();
+    rover.usePointerLock();
 }
-let p5_0 = new p5(sketch);
+
+function draw() {
+    background(51);
+    // translate(0, 0, -100);
+    fill(255, 0, 0);
+    noStroke();
+    let n = 50;
+    for (let i = 0; i < n; i++) {
+        push();
+        rotateZ(PI/2);
+        rotateY(2*PI/n * i);
+        rectMode(CENTER)
+        rect(0, 0, 100, 2); 
+        pop();
+    }
+    // box(50);
+    // orbitControl();
+    lights();
+}
+
