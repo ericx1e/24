@@ -1,18 +1,23 @@
 
 
 let cards = [];
+let prevCards = [];
 let selectedCards = [];
+let intialCards = [];
 let score = 0;
 
 function setup() {
     canvas = createCanvas(window.innerWidth, window.innerHeight);
     canvas.position(0, 0);
 
+    // cards = [new Card(100, 100, 7),new Card(100, 100, 7),new Card(100, 100, 4),new Card(100, 100, 4)]
+
     // for(let n = 0; n < 4; n++) {
     //     for(let i = 1; i <= 13; i++) {
     //         cards.push(new Card(random(0, width-50), random(0, height-50), i));
     //     }
     // }
+
 }
 
 
@@ -76,10 +81,15 @@ function keyTyped() {
 
     if(key == 'n') {
         newBoard();
+        checkPossible();
     }
 
     if(selectedCards.length == 2) {
         if(key == 'a') {
+            prevCards = [];
+            cards.forEach(card => {
+                prevCards.push(card);
+            });
             cards.push(new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n + selectedCards[1].n));
             cards.splice(cards.indexOf(selectedCards[0]), 1);
             cards.splice(cards.indexOf(selectedCards[1]), 1);
@@ -87,6 +97,10 @@ function keyTyped() {
         }
         
         if(key == 's') {
+            prevCards = [];
+            cards.forEach(card => {
+                prevCards.push(card);
+            });
             cards.push(new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n - selectedCards[1].n));
             cards.splice(cards.indexOf(selectedCards[0]), 1);
             cards.splice(cards.indexOf(selectedCards[1]), 1);
@@ -94,6 +108,10 @@ function keyTyped() {
         }
 
         if(key == 'd') {
+            prevCards = [];
+            cards.forEach(card => {
+                prevCards.push(card);
+            });
             cards.push(new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n / selectedCards[1].n));
             cards.splice(cards.indexOf(selectedCards[0]), 1);
             cards.splice(cards.indexOf(selectedCards[1]), 1);
@@ -101,6 +119,10 @@ function keyTyped() {
         }
 
         if(key == 'm') {
+            prevCards = [];
+            cards.forEach(card => {
+                prevCards.push(card);
+            });
             cards.push(new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n * selectedCards[1].n));
             cards.splice(cards.indexOf(selectedCards[0]), 1);
             cards.splice(cards.indexOf(selectedCards[1]), 1);
@@ -114,6 +136,20 @@ function keyTyped() {
             }
         }
     }
+
+    if(key == 'u') {
+        cards = [];
+        prevCards.forEach(card => {
+            cards.push(card);
+        });
+    }
+
+    if(key == 'r') {
+        cards = [];
+        intialCards.forEach(card => {
+            cards.push(card);
+        });
+    }
 }
 
 function newBoard() {
@@ -121,7 +157,99 @@ function newBoard() {
     for(let i = 0; i < 4; i++) {
         cards.push(new Card(random(0, width-125), random(0, height-175), Math.floor(random(1, 14))));
     }
+
+    prevCards = [];
+    cards.forEach(card => {
+        prevCards.push(card);
+    });
+
+    intialCards = [];
+    cards.forEach(card => {
+        intialCards.push(card);
+    });
 }
+
+function checkPossible() {
+    permutations = permutator(cards);
+    // operations = permutator([0,1,2,3]);
+    permutations.forEach(p => {
+        result = 0;
+        result += p[0].n;
+        console.log(p[0].n, p[1].n, p[2].n, p[3].n);
+        for (let i = 0; i < 1; i++) {
+            switch(i) {
+                case 0:
+                    result += p[1].n;
+                    //break;
+                case 1:
+                    result -= p[1].n;
+                    //break;
+                case 2:
+                    result *= p[1].n;
+                    //break;
+                case 3:
+                    result /= p[1].n;
+                    //break;
+            }
+            for (let j = 0; j < 1; j++) {
+                switch(j) {
+                    case 0:
+                        result += p[2].n;
+                        //break;
+                    case 1:
+                        result -= p[2].n;
+                        //break;
+                    case 2:
+                        result *= p[2].n;
+                        //break;
+                    case 3:
+                        result /= p[2].n;
+                        //break;
+                }
+                for (let k = 0; k < 1; k++) {
+                    switch(k) {
+                        case 0:
+                            result += p[3].n;
+                            //break;
+                        case 1:
+                            result -= p[3].n;
+                            //break;
+                        case 2:
+                            result *= p[3].n;
+                            //break;
+                        case 3:
+                            result /= p[3].n;
+                            //break;
+                    }
+                    // if(result > 10) {
+                    //     console.log(result);
+                    // }
+                }
+            }
+        }
+    });
+}
+
+function permutator(inputArr) {
+    var results = [];
+  
+    function permute(arr, memo) {
+      var cur, memo = memo || [];
+  
+      for (var i = 0; i < arr.length; i++) {
+        cur = arr.splice(i, 1);
+        if (arr.length === 0) {
+          results.push(memo.concat(cur));
+        }
+        permute(arr.slice(), memo.concat(cur));
+        arr.splice(i, 0, cur[0]);
+      }
+  
+      return results;
+    }
+  
+    return permute(inputArr);
+  }
 
 function Card(x, y, n) {
     this.x = x; 
