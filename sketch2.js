@@ -10,14 +10,16 @@ function setup() {
     canvas = createCanvas(window.innerWidth, window.innerHeight);
     canvas.position(0, 0);
 
-    // cards = [new Card(100, 100, 7),new Card(100, 100, 7),new Card(100, 100, 4),new Card(100, 100, 4)]
+    // cards = [new Card(100, 100, 7),new Card(100, 100, 7),new Card(100, 100, 3),new Card(100, 100, 3)];
+    // console.log(checkPossible());
+
+    newBoard();
 
     // for(let n = 0; n < 4; n++) {
     //     for(let i = 1; i <= 13; i++) {
     //         cards.push(new Card(random(0, width-50), random(0, height-50), i));
     //     }
     // }
-
 }
 
 
@@ -81,7 +83,8 @@ function keyTyped() {
 
     if(key == 'n') {
         newBoard();
-        checkPossible();
+        console.log(checkPossible());
+        // checkPossible();
     }
 
     if(selectedCards.length == 2) {
@@ -157,6 +160,12 @@ function newBoard() {
     for(let i = 0; i < 4; i++) {
         cards.push(new Card(random(0, width-125), random(0, height-175), Math.floor(random(1, 14))));
     }
+    while(!checkPossible()) {
+        cards = [];
+        for(let i = 0; i < 4; i++) {
+            cards.push(new Card(random(0, width-125), random(0, height-175), Math.floor(random(1, 14))));
+        }
+    }
 
     prevCards = [];
     cards.forEach(card => {
@@ -167,67 +176,8 @@ function newBoard() {
     cards.forEach(card => {
         intialCards.push(card);
     });
-}
 
-function checkPossible() {
-    permutations = permutator(cards);
-    // operations = permutator([0,1,2,3]);
-    permutations.forEach(p => {
-        result = 0;
-        result += p[0].n;
-        console.log(p[0].n, p[1].n, p[2].n, p[3].n);
-        for (let i = 0; i < 1; i++) {
-            switch(i) {
-                case 0:
-                    result += p[1].n;
-                    //break;
-                case 1:
-                    result -= p[1].n;
-                    //break;
-                case 2:
-                    result *= p[1].n;
-                    //break;
-                case 3:
-                    result /= p[1].n;
-                    //break;
-            }
-            for (let j = 0; j < 1; j++) {
-                switch(j) {
-                    case 0:
-                        result += p[2].n;
-                        //break;
-                    case 1:
-                        result -= p[2].n;
-                        //break;
-                    case 2:
-                        result *= p[2].n;
-                        //break;
-                    case 3:
-                        result /= p[2].n;
-                        //break;
-                }
-                for (let k = 0; k < 1; k++) {
-                    switch(k) {
-                        case 0:
-                            result += p[3].n;
-                            //break;
-                        case 1:
-                            result -= p[3].n;
-                            //break;
-                        case 2:
-                            result *= p[3].n;
-                            //break;
-                        case 3:
-                            result /= p[3].n;
-                            //break;
-                    }
-                    // if(result > 10) {
-                    //     console.log(result);
-                    // }
-                }
-            }
-        }
-    });
+    // console.log(checkPossible());
 }
 
 function permutator(inputArr) {
@@ -263,23 +213,23 @@ function Card(x, y, n) {
     this.show = function() {
         // noStroke();
         let tx;
-        switch(this.n) {
-            case 1:
-                tx = 'A';
-                break;
-            case 11:
-                tx = 'J';
-                break;
-            case 12:
-                tx = 'Q';
-                break;
-            case 13:
-                tx = 'K';
-                break;
-            default:
-                tx = Math.round(n * 100) / 100;
-                break;
-        }
+        // switch(this.n) {
+        //     case 1:
+        //         tx = 'A';
+        //         break;
+        //     case 11:
+        //         tx = 'J';
+        //         break;
+        //     case 12:
+        //         tx = 'Q';
+        //         break;
+        //     case 13:
+        //         tx = 'K';
+        //         break;
+        //     default:
+        //         break;
+        // }
+        tx = Math.round(n * 100) / 100;
 
         this.selected = selectedCards.includes(this);
 
