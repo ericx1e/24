@@ -5,6 +5,7 @@ let prevCards = [];
 let selectedCards = [];
 let intialCards = [];
 let score = 0;
+let infoCard = true;
 
 function setup() {
     canvas = createCanvas(window.innerWidth, window.innerHeight);
@@ -22,6 +23,11 @@ function setup() {
     // }
 }
 
+function windowResized() {
+    canvas = createCanvas(window.innerWidth, window.innerHeight);
+    canvas.position(0, 0);
+}
+
 
 function draw() {
     background(51);
@@ -31,8 +37,7 @@ function draw() {
     noStroke();
     textAlign(LEFT, TOP)
     text("score: " + score, 100, 50);
-    text("fps: " + Math.floor(frameRate()), 100, 100);
-
+    
     let flag = false;
     for(let i = cards.length-1; i >= 0; i--) {
         let card = cards[i];
@@ -47,6 +52,18 @@ function draw() {
         let card = cards[i];
         card.show();
     }
+
+    // if(infoCard) {
+    //     fill(70);
+    //     rectMode(CENTER);
+    //     textAlign(CENTER, CENTER);
+    //     stroke(0);
+    //     rect(mouseX, mouseY, 300, 300, 30);
+    //     fill(255);
+    //     text("Controls", mouseX, mouseY);
+    // }
+
+
     noCursor();
     if(mouseIsPressed) {
         stroke(255, 50, 50);
@@ -56,6 +73,7 @@ function draw() {
         strokeWeight(10);
     }
     line(mouseX, mouseY, pmouseX, pmouseY);
+    
 }
 
 function keyTyped() {
@@ -88,7 +106,7 @@ function keyTyped() {
     }
 
     if(selectedCards.length == 2) {
-        if(key == 'a') {
+        if(key == 'a' || key == '+') {
             prevCards = [];
             cards.forEach(card => {
                 prevCards.push(card);
@@ -99,7 +117,7 @@ function keyTyped() {
             selectedCards = [];
         }
         
-        if(key == 's') {
+        if(key == 's' || key == '-') {
             prevCards = [];
             cards.forEach(card => {
                 prevCards.push(card);
@@ -110,7 +128,7 @@ function keyTyped() {
             selectedCards = [];
         }
 
-        if(key == 'd') {
+        if(key == 'd' || key == '*') {
             prevCards = [];
             cards.forEach(card => {
                 prevCards.push(card);
@@ -121,7 +139,7 @@ function keyTyped() {
             selectedCards = [];
         }
 
-        if(key == 'm') {
+        if(key == 'm' || key == '/') {
             prevCards = [];
             cards.forEach(card => {
                 prevCards.push(card);
@@ -142,6 +160,7 @@ function keyTyped() {
 
     if(key == 'u') {
         cards = [];
+        selectedCards = [];
         prevCards.forEach(card => {
             cards.push(card);
         });
@@ -149,6 +168,7 @@ function keyTyped() {
 
     if(key == 'r') {
         cards = [];
+        selectedCards = [];
         intialCards.forEach(card => {
             cards.push(card);
         });
@@ -230,6 +250,8 @@ function Card(x, y, n) {
         //         break;
         // }
         tx = Math.round(n * 100) / 100;
+
+    rectMode(CORNER);
 
         this.selected = selectedCards.includes(this);
 
