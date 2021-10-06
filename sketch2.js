@@ -39,16 +39,16 @@ function draw() {
     text("score: " + score, 100, 50);
     
     let flag = false;
-    for(let i = cards.length-1; i >= 0; i--) {
+    for (let i = cards.length - 1; i >= 0; i--) {
         let card = cards[i];
-        if(!flag && card.update()) {
+        if (!flag && card.update()) {
             flag = true;
             cards.splice(i, 1);
             cards.push(card);
             // cards.splice(0, 0, card);
         }
     }
-    for(let i = 0; i < cards.length; i++) {
+    for (let i = 0; i < cards.length; i++) {
         let card = cards[i];
         card.show();
     }
@@ -65,7 +65,7 @@ function draw() {
 
 
     noCursor();
-    if(mouseIsPressed) {
+    if (mouseIsPressed) {
         stroke(255, 50, 50);
         strokeWeight(15);
     } else {
@@ -77,20 +77,20 @@ function draw() {
 }
 
 function keyTyped() {
-    if(key == ' ') {
+    if (key == ' ') {
         let flag = false;
-        for(let i = cards.length-1; i >= 0; i--) {
+        for (let i = cards.length - 1; i >= 0; i--) {
             let card = cards[i];
-            if(!flag && card.touchingMouse()) {
+            if (!flag && card.touchingMouse()) {
                 flag = true;
                 // card.selected = !card.selected;
                 cards.splice(i, 1);
                 cards.push(card);
-                if(selectedCards.includes(card)) {
+                if (selectedCards.includes(card)) {
                     selectedCards.splice(selectedCards.indexOf(card), 1);
                 } else {
                     selectedCards.push(card);
-                    if(selectedCards.length > 2) {
+                    if (selectedCards.length > 2) {
                         selectedCards.splice(0, 1);
                     }
 
@@ -99,10 +99,8 @@ function keyTyped() {
         }
     }
 
-    if(key == 'n') {
+    if (key == 'n') {
         newBoard();
-        console.log(checkPossible());
-        // checkPossible();
     }
 
     if(selectedCards.length == 2) {
@@ -150,15 +148,15 @@ function keyTyped() {
             selectedCards = [];
         }
 
-        if(cards.length == 1) {
-            if(cards[0].n == 24) {
+        if (cards.length == 1) {
+            if (cards[0].n == 24) {
                 score++;
                 newBoard();
             }
         }
     }
 
-    if(key == 'u') {
+    if (key == 'u') {
         cards = [];
         selectedCards = [];
         prevCards.forEach(card => {
@@ -166,7 +164,7 @@ function keyTyped() {
         });
     }
 
-    if(key == 'r') {
+    if (key == 'r') {
         cards = [];
         selectedCards = [];
         intialCards.forEach(card => {
@@ -177,13 +175,13 @@ function keyTyped() {
 
 function newBoard() {
     cards = [];
-    for(let i = 0; i < 4; i++) {
-        cards.push(new Card(random(0, width-125), random(0, height-175), Math.floor(random(1, 14))));
+    for (let i = 0; i < 4; i++) {
+        cards.push(new Card(random(0, width - 125), random(0, height - 175), Math.floor(random(1, 14))));
     }
-    while(!checkPossible()) {
+    while (!checkPossible()) {
         cards = [];
-        for(let i = 0; i < 4; i++) {
-            cards.push(new Card(random(0, width-125), random(0, height-175), Math.floor(random(1, 14))));
+        for (let i = 0; i < 4; i++) {
+            cards.push(new Card(random(0, width - 125), random(0, height - 175), Math.floor(random(1, 14))));
         }
     }
 
@@ -197,32 +195,34 @@ function newBoard() {
         intialCards.push(card);
     });
 
+    selectedCards = [];
+
     // console.log(checkPossible());
 }
 
 function permutator(inputArr) {
     var results = [];
-  
+
     function permute(arr, memo) {
-      var cur, memo = memo || [];
-  
-      for (var i = 0; i < arr.length; i++) {
-        cur = arr.splice(i, 1);
-        if (arr.length === 0) {
-          results.push(memo.concat(cur));
+        var cur, memo = memo || [];
+
+        for (var i = 0; i < arr.length; i++) {
+            cur = arr.splice(i, 1);
+            if (arr.length === 0) {
+                results.push(memo.concat(cur));
+            }
+            permute(arr.slice(), memo.concat(cur));
+            arr.splice(i, 0, cur[0]);
         }
-        permute(arr.slice(), memo.concat(cur));
-        arr.splice(i, 0, cur[0]);
-      }
-  
-      return results;
+
+        return results;
     }
-  
+
     return permute(inputArr);
-  }
+}
 
 function Card(x, y, n) {
-    this.x = x; 
+    this.x = x;
     this.y = y;
     this.w = 125;
     this.h = 175;
@@ -230,7 +230,7 @@ function Card(x, y, n) {
     this.lifted = false;
     this.selected = false;
 
-    this.show = function() {
+    this.show = function () {
         // noStroke();
         let tx;
         // switch(this.n) {
@@ -255,61 +255,61 @@ function Card(x, y, n) {
 
         this.selected = selectedCards.includes(this);
 
-        if(this.lifted) {
+        if (this.lifted) {
             noStroke();
             fill(17, 100);
             rect(this.x, this.y, this.w, this.h, 20);
-            if(this.selected) {
+            if (this.selected) {
                 strokeWeight(5);
-                stroke(255, 50, 50); 
+                stroke(255, 50, 50);
             } else {
                 strokeWeight(2);
-                stroke(17); 
+                stroke(17);
             }
             fill(255);
-            rect(this.x+5, this.y-3, this.w, this.h, 20);
+            rect(this.x + 5, this.y - 3, this.w, this.h, 20);
             fill(255, 100, 100);
             noStroke();
-            textSize(this.w/2);
+            textSize(this.w / 2);
             textAlign(CENTER, CENTER)
-            text(tx, this.x+5+this.w/2, this.y-3+this.h/2);
+            text(tx, this.x + 5 + this.w / 2, this.y - 3 + this.h / 2);
 
-            if(this.selected) {
+            if (this.selected) {
                 noStroke();
                 fill(255, 50, 50);
                 textSize(20);
-                text(selectedCards.indexOf(this)+1, this.x + 5 + 20, this.y - 3 + 20);
+                text(selectedCards.indexOf(this) + 1, this.x + 5 + 20, this.y - 3 + 20);
             }
         } else {
-            if(this.selected) {
+            if (this.selected) {
                 strokeWeight(5);
-                stroke(255, 50, 50); 
+                stroke(255, 50, 50);
             } else {
                 strokeWeight(2);
-                stroke(17); 
+                stroke(17);
             }
             fill(255);
             rect(this.x, this.y, this.w, this.h, 20);
             fill(255, 100, 100);
             noStroke();
-            textSize(this.w/2);
+            textSize(this.w / 2);
             textAlign(CENTER, CENTER)
-            text(tx, this.x+this.w/2, this.y+this.h/2);
+            text(tx, this.x + this.w / 2, this.y + this.h / 2);
 
-            if(this.selected) {
+            if (this.selected) {
                 noStroke();
                 fill(255, 50, 50);
                 textSize(20);
-                text(selectedCards.indexOf(this)+1, this.x + 20, this.y + 20);
+                text(selectedCards.indexOf(this) + 1, this.x + 20, this.y + 20);
             }
         }
 
     }
 
-    this.update = function() {
-        if(this.lifted) {
-            this.x += mouseX-pmouseX;
-            this.y += mouseY-pmouseY;
+    this.update = function () {
+        if (this.lifted) {
+            this.x += mouseX - pmouseX;
+            this.y += mouseY - pmouseY;
         }
         this.lifted = mouseIsPressed && this.touchingMouse();
 
@@ -320,7 +320,7 @@ function Card(x, y, n) {
         return this.lifted; //So you can only life one card at a time
     }
 
-    this.touchingMouse = function() {
+    this.touchingMouse = function () {
         return this.x < mouseX && this.x + this.w > mouseX && this.y < mouseY && this.y + this.h > mouseY;
     }
 }
