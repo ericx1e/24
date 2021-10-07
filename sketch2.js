@@ -63,7 +63,7 @@ function draw() {
     noStroke();
     fill(70);
     rect(0, 0, width, 100);
-    textSize(30);
+    textSize(width/30);
     fill(255);
     noStroke();
     textAlign(LEFT, CENTER);
@@ -279,8 +279,10 @@ function locationTaken(x, y) {
 function Card(x, y, n) {
     this.x = x;
     this.y = y;
-    this.w = 125;
-    this.h = 175;
+    this.h = (width+height)/10;
+    this.w = this.h/7*5;
+    // this.w = 125;
+    // this.h = 175;
     this.n = n;
     this.lifted = false;
     this.selected = false;
@@ -313,7 +315,7 @@ function Card(x, y, n) {
         if (this.lifted) {
             noStroke();
             fill(17, 100);
-            rect(this.x, this.y, this.w, this.h, 20);
+            rect(this.x, this.y, this.w, this.h, this.w/5);
             if (this.selected) {
                 strokeWeight(5);
                 stroke(255, 50, 50);
@@ -322,7 +324,7 @@ function Card(x, y, n) {
                 stroke(17);
             }
             fill(255);
-            rect(this.x + 5, this.y - 3, this.w, this.h, 20);
+            rect(this.x + 5, this.y - 3, this.w, this.h, this.w/5);
             fill(255, 100, 100);
             noStroke();
             textSize(this.w / 2);
@@ -332,8 +334,8 @@ function Card(x, y, n) {
             if (this.selected) {
                 noStroke();
                 fill(255, 50, 50);
-                textSize(20);
-                text(selectedCards.indexOf(this) + 1, this.x + 5 + 20, this.y - 3 + 20);
+                textSize(this.w/5);
+                text(selectedCards.indexOf(this) + 1, this.x + 5 + this.w/5, this.y - 3 + this.w/5);
             }
         } else {
             if (this.selected) {
@@ -344,7 +346,7 @@ function Card(x, y, n) {
                 stroke(17);
             }
             fill(255);
-            rect(this.x, this.y, this.w, this.h, 20);
+            rect(this.x, this.y, this.w, this.h, this.w/5);
             fill(255, 100, 100);
             noStroke();
             textSize(this.w / 2);
@@ -354,8 +356,8 @@ function Card(x, y, n) {
             if (this.selected) {
                 noStroke();
                 fill(255, 50, 50);
-                textSize(20);
-                text(selectedCards.indexOf(this) + 1, this.x + 20, this.y + 20);
+                textSize(this.w/5);
+                text(selectedCards.indexOf(this) + 1, this.x + this.w/5, this.y + this.w/5);
             }
         }
 
@@ -449,8 +451,12 @@ function Button(x, y, id) {
                 break;
             case "undo":
                 noFill();
-                line(this.x - this.w/4, this.y, this.x + this.w/4, this.y);
-                triangle(this.x - this.w/4, this.y - this.w/20, this.x - this.w/4, this.y + this.w/20, this.x - this.w/4 - this.w/15, this.y);
+                arc(this.x, this.y + this.h/3, this.w, this.h, PI + PI/3, -PI/3);
+                push()
+                translate(this.x, this.y+ this.h/3);
+                rotate(-PI/6);
+                triangle(0, 0 - this.h/2 - this.w/20, 0, 0 - this.h/2 + this.w/20, 0 - this.w/15, 0 - this.h/2);
+                pop();
                 break;
             case "reset":
                 noFill();
