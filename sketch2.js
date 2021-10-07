@@ -8,14 +8,14 @@ let prevBoard = [];
 let score = 0;
 let info = false;
 let buttons = [];
-let buttonIds = ["add", "sub", "mult", "div", "undo", "reset"];
+let buttonIds = ["add", "sub", "mult", "div", "undo", "reset", "next"];
 
 function setup() {
     canvas = createCanvas(window.innerWidth, window.innerHeight);
     canvas.position(0, 0);
 
     for(let i = 0; i < buttonIds.length; i++) {
-        buttons.push(new Button(width - 700 + 125 * i, 50, buttonIds[i]));
+        buttons.push(new Button(width - 700 + 100 * i, 50, buttonIds[i]));
     }
 
     // cards = [new Card(100, 100, 7),new Card(100, 100, 7),new Card(100, 100, 3),new Card(100, 100, 3)];
@@ -72,7 +72,6 @@ function draw() {
 
     buttons.forEach(button => {
         button.show();
-        button.update();
     });
 
 
@@ -108,6 +107,10 @@ function touchStarted() {
             }
         }
     }
+
+    buttons.forEach(button => {
+        button.update();
+    });
     return false;
 }
 
@@ -211,12 +214,19 @@ function newBoard() {
 
     cards = [];
     for (let i = 0; i < 4; i++) {
-        cards.push(new Card(random(0, width - 125), random(0, height - 175), Math.floor(random(1, 14))));
+        let randX = random(0, width - 125);
+        let randY = random(100, height - 175);
+        while(locationTaken(randX, randY)) {
+            randX = random(0, width - 125);
+            randY = random(100, height - 175);
+        }
+        cards.push(new Card(randX, randY, Math.floor(random(1, 14))));
     }
+
     while (!checkPossible()) {
         cards = [];
         for (let i = 0; i < 4; i++) {
-            cards.push(new Card(random(0, width - 125), random(0, height - 175), Math.floor(random(1, 14))));
+            cards.push(new Card(random(0, width - 125), random(100, height - 175), Math.floor(random(1, 14))));
         }
     }
 
@@ -254,6 +264,16 @@ function permutator(inputArr) {
     }
 
     return permute(inputArr);
+}
+
+function locationTaken(x, y) {
+    let result = false;
+    cards.forEach(card => {
+        if(card.x < x && card.x + card.w > x && card.y < y && card.y + card.h > y) {
+            result = true;
+        }
+    });
+    return result;
 }
 
 function Card(x, y, n) {
@@ -395,6 +415,9 @@ function Button(x, y, id) {
             case "reset":
                 fill(220);
                 break;
+            case "next":
+                fill(220);
+                break;
         }
 
         noStroke();
@@ -421,8 +444,8 @@ function Button(x, y, id) {
             case "div":
                 line(this.x - this.w/4, this.y, this.x + this.w/4, this.y);
                 strokeWeight(12);
-                line(this.x, this.y - this.h/4.5, this.x, this.y - this.h/4.5);
-                line(this.x, this.y + this.h/4.5, this.x, this.y + this.h/4.5);
+                point(this.x, this.y - this.h/4.5);
+                point(this.x, this.y + this.h/4.5);
                 break;
             case "undo":
                 noFill();
@@ -434,6 +457,11 @@ function Button(x, y, id) {
                 arc(this.x, this.y, this.w/2, this.h/2, 3/2*PI, PI);
                 triangle(this.x, this.y - this.h/4 - this.w/20, this.x, this.y - this.h/4 + this.w/20, this.x - this.w/15, this.y - this.h/4);
                 break;
+            case "next":
+                noFill();
+                line(this.x - this.w/4, this.y, this.x + this.w/4, this.y);
+                triangle(this.x + this.w/4, this.y - this.w/20, this.x + this.w/4, this.y + this.w/20, this.x + this.w/4 + this.w/15, this.y);
+                break;
         }
     }
 
@@ -442,7 +470,7 @@ function Button(x, y, id) {
     }
 
     this.update = function() {
-        if(this.touchingMouse() && mouseIsPressed) {
+        if(this.touchingMouse()) {
             if(selectedCards.length == 2) {
                 switch(this.id) {
                     case "add":
@@ -508,6 +536,9 @@ function Button(x, y, id) {
                     intialCards.forEach(card => {
                         cards.push(card);
                     });
+                    break;
+                case "next":
+                    newBoard();
                     break;
             }
         }
