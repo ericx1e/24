@@ -486,6 +486,13 @@ function Button(x, y, id) {
                         selectedCards = [];
                         break;
                 }
+
+                if (cards.length == 1) {
+                    if (cards[0].n == 24) {
+                        score++;
+                        newBoard();
+                    }
+                }
             }
             switch(this.id) {
                 case "undo":
