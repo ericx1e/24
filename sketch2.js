@@ -11,6 +11,8 @@ let buttons = [];
 let buttonIds = ["add", "sub", "mult", "div", "undo", "reset", "next"];
 
 function setup() {
+    console
+
     canvas = createCanvas(window.innerWidth, window.innerHeight);
     canvas.position(0, 0);
 
@@ -30,7 +32,7 @@ function setup() {
     //     }
     // }
 }
-
+//Eric Xie is cute
 function windowResized() {
     canvas = createCanvas(window.innerWidth, window.innerHeight);
     canvas.position(0, 0);
@@ -213,15 +215,11 @@ function newBoard() {
     });
 
     cards = [];
-    for (let i = 0; i < 4; i++) {
-        let randX = random(0, width - 125);
-        let randY = random(100, height - 175);
-        while(locationTaken(randX, randY)) {
-            randX = random(0, width - 125);
-            randY = random(100, height - 175);
-        }
-        cards.push(new Card(randX, randY, Math.floor(random(1, 14))));
-    }
+
+    addNewCard();
+    addNewCard();
+    addNewCard();
+    addNewCard();
 
     while (!checkPossible()) {
         cards = [];
@@ -243,6 +241,18 @@ function newBoard() {
     selectedCards = [];
 
     // console.log(checkPossible());
+}
+
+function addNewCard() {
+    let h = (width+height)/10;
+    let w = h/7*5;
+    let randX = random(0, width - w);
+    let randY = random(100, height - h);
+    while(locationTaken(randX, randY)) {
+        randX = random(0, width - w);
+        randY = random(100, height - h);
+    }
+    cards.push(new Card(randX, randY, Math.floor(random(1, 14))));
 }
 
 function permutator(inputArr) {
@@ -269,7 +279,7 @@ function permutator(inputArr) {
 function locationTaken(x, y) {
     let result = false;
     cards.forEach(card => {
-        if(card.x < x && card.x + card.w > x && card.y < y && card.y + card.h > y) {
+        if(x > card.x - card.w && x < card.x + card.w && y > card.y - card.h && y < card.y + card.h) {
             result = true;
         }
     });
@@ -412,13 +422,13 @@ function Button(x, y, id) {
                 fill(255, 100, 255);
                 break;
             case "undo":
-                fill(220);
+                fill(200);
                 break;
             case "reset":
-                fill(220);
+                fill(200);
                 break;
             case "next":
-                fill(220);
+                fill(200);
                 break;
         }
 
