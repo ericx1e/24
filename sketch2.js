@@ -10,11 +10,14 @@ let info = false;
 let buttons = [];
 let buttonIds = ["add", "sub", "mult", "div", "undo", "reset", "next"];
 
-function setup() {
-    console
+let confettiColor;
+let confetti = [];
 
+function setup() {
+    confettiColor = [color('#00aeef'), color('#ec008c'), color('#72c8b6'), color('#d198f9')];
     canvas = createCanvas(window.innerWidth, window.innerHeight);
     canvas.position(0, 0);
+
 
     for(let i = 0; i < buttonIds.length; i++) {
         buttons.push(new Button(width - 700 + 100 * i, 50, buttonIds[i]));
@@ -24,6 +27,7 @@ function setup() {
     // console.log(checkPossible());
 
     newBoard();
+    // cards = [new Card(width/2, height/2, 24)];
     prevBoard = cards;
 
     // for(let n = 0; n < 4; n++) {
@@ -76,6 +80,20 @@ function draw() {
         button.show();
     });
 
+    confetti.forEach(c => {
+        c.confettiDisplay();
+    });
+
+    for(let i = 0; i < confetti.length; i++) {
+        if(confetti[i].y > height*2) {
+            confetti.splice(i, 1);
+            i--;
+        }
+    }
+
+    if(confetti.length < 100 && confetti.length > 0) {
+        newBoard();
+    }
 
     noCursor();
     if (mouseIsPressed) {
@@ -171,8 +189,9 @@ function keyTyped() {
 
         if (cards.length == 1) {
             if (cards[0].n == 24) {
-                score++;
-                newBoard();
+                scorePoint();
+                // score++;
+                // newBoard();
             }
         }
     }
@@ -208,6 +227,7 @@ function touchMoved() {
 }
 
 function newBoard() {
+    confetti = [];
     prevBoard = [];
 
     intialCards.forEach(card => {
@@ -286,6 +306,14 @@ function locationTaken(x, y) {
     return result;
 }
 
+function scorePoint() {
+    score++;
+    for (let i = 0; i < 200; i++) {
+        confetti[i] = new Confetti(random(0, width), random(height/2, height*2), -height/7);
+    }
+
+}
+
 function Card(x, y, n) {
     this.x = x;
     this.y = y;
@@ -321,6 +349,10 @@ function Card(x, y, n) {
     rectMode(CORNER);
 
         this.selected = selectedCards.includes(this);
+        if(n == 24 && cards.length == 1) {
+            this.selected = false;
+            this.lifted = false;
+        }
 
         if (this.lifted) {
             noStroke();
@@ -355,12 +387,27 @@ function Card(x, y, n) {
                 strokeWeight(2);
                 stroke(17);
             }
+            if(n == 24 && cards.length == 1) {
+                stroke(255, 255, 0, 80);
+                strokeWeight(20);
+                noFill();
+                rect(this.x, this.y, this.w, this.h, this.w/5);
+                fill(255, 255, 0, 80);
+                stroke(255, 255, 0);
+                strokeWeight(7);
+            }
             fill(255);
             rect(this.x, this.y, this.w, this.h, this.w/5);
-            fill(255, 100, 100);
-            noStroke();
+            textAlign(CENTER, CENTER);
             textSize(this.w / 2);
-            textAlign(CENTER, CENTER)
+            if(n == 24 && cards.length == 1) {
+                stroke(255, 255, 0, 80);
+                strokeWeight(10);
+                fill(255, 255, 0);
+            } else{
+                fill(255, 100, 100);
+                noStroke();
+            }
             text(tx, this.x + this.w / 2, this.y + this.h / 2);
 
             if (this.selected) {
@@ -533,8 +580,9 @@ function Button(x, y, id) {
 
                 if (cards.length == 1) {
                     if (cards[0].n == 24) {
-                        score++;
-                        newBoard();
+                        scorePoint();
+                        // score++;
+                        // newBoard();
                     }
                 }
             }
