@@ -165,7 +165,7 @@ function keyTyped() {
             selectedCards = [];
         }
 
-        if(key == 'd' || key == '*') {
+        if(key == 'd' || key == '/') {
             prevCards = [];
             cards.forEach(card => {
                 prevCards.push(card);
@@ -176,7 +176,7 @@ function keyTyped() {
             selectedCards = [];
         }
 
-        if(key == 'm' || key == '/') {
+        if(key == 'm' || key == '*') {
             prevCards = [];
             cards.forEach(card => {
                 prevCards.push(card);
