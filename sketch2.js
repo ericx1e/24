@@ -91,7 +91,7 @@ function draw() {
         }
     }
 
-    if(confetti.length < 100 && confetti.length > 0) {
+    if(confetti.length < 75 && confetti.length > 0) {
         newBoard();
     }
 
@@ -308,7 +308,7 @@ function locationTaken(x, y) {
 
 function scorePoint() {
     score++;
-    for (let i = 0; i < 200; i++) {
+    for (let i = 0; i < 150; i++) {
         confetti[i] = new Confetti(random(0, width), random(height/2, height*2), -height/7);
     }
 
