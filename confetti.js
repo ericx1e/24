@@ -33,7 +33,7 @@ function Confetti(x, y, s) {
             this.speed *= 0.8;
         }
         
-        this.speed += 1 / 20;
+        this.speed += height / 14000;
 
         this.y += this.speed;
     }
