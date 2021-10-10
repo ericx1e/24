@@ -19,7 +19,7 @@ function setup() {
     canvas.position(0, 0);
 
 
-    for(let i = 0; i < buttonIds.length; i++) {
+    for (let i = 0; i < buttonIds.length; i++) {
         buttons.push(new Button(width - 700 + 100 * i, 50, buttonIds[i]));
     }
 
@@ -46,7 +46,7 @@ function windowResized() {
 function draw() {
     background(51);
 
-    
+
     let flag = false;
     for (let i = cards.length - 1; i >= 0; i--) {
         let card = cards[i];
@@ -69,7 +69,7 @@ function draw() {
     noStroke();
     fill(70);
     rect(0, 0, width, 100);
-    textSize(width/30);
+    textSize(width / 30);
     fill(255);
     noStroke();
     textAlign(LEFT, CENTER);
@@ -84,14 +84,14 @@ function draw() {
         c.confettiDisplay();
     });
 
-    for(let i = 0; i < confetti.length; i++) {
-        if(confetti[i].y > height*2) {
+    for (let i = 0; i < confetti.length; i++) {
+        if (confetti[i].y > height * 2) {
             confetti.splice(i, 1);
             i--;
         }
     }
 
-    if(confetti.length < 75 && confetti.length > 0) {
+    if (confetti.length < 75 && confetti.length > 0) {
         newBoard();
     }
 
@@ -142,8 +142,8 @@ function keyTyped() {
         newBoard();
     }
 
-    if(selectedCards.length == 2) {
-        if(key == 'a' || key == '+') {
+    if (selectedCards.length == 2) {
+        if (key == 'a' || key == '+') {
             prevCards = [];
             cards.forEach(card => {
                 prevCards.push(card);
@@ -153,8 +153,8 @@ function keyTyped() {
             cards.splice(cards.indexOf(selectedCards[1]), 1);
             selectedCards = [];
         }
-        
-        if(key == 's' || key == '-') {
+
+        if (key == 's' || key == '-') {
             prevCards = [];
             cards.forEach(card => {
                 prevCards.push(card);
@@ -165,7 +165,7 @@ function keyTyped() {
             selectedCards = [];
         }
 
-        if(key == 'd' || key == '/') {
+        if (key == 'd' || key == '/') {
             prevCards = [];
             cards.forEach(card => {
                 prevCards.push(card);
@@ -176,7 +176,7 @@ function keyTyped() {
             selectedCards = [];
         }
 
-        if(key == 'm' || key == '*') {
+        if (key == 'm' || key == '*') {
             prevCards = [];
             cards.forEach(card => {
                 prevCards.push(card);
@@ -264,11 +264,11 @@ function newBoard() {
 }
 
 function addNewCard() {
-    let h = (width+height)/10;
-    let w = h/7*5;
+    let h = (width + height) / 10;
+    let w = h / 7 * 5;
     let randX = random(0, width - w);
     let randY = random(100, height - h);
-    while(locationTaken(randX, randY)) {
+    while (locationTaken(randX, randY)) {
         randX = random(0, width - w);
         randY = random(100, height - h);
     }
@@ -299,7 +299,7 @@ function permutator(inputArr) {
 function locationTaken(x, y) {
     let result = false;
     cards.forEach(card => {
-        if(x > card.x - card.w && x < card.x + card.w && y > card.y - card.h && y < card.y + card.h) {
+        if (x > card.x - card.w && x < card.x + card.w && y > card.y - card.h && y < card.y + card.h) {
             result = true;
         }
     });
@@ -309,7 +309,7 @@ function locationTaken(x, y) {
 function scorePoint() {
     score++;
     for (let i = 0; i < 150; i++) {
-        confetti[i] = new Confetti(random(0, width), random(height/2, height*2), -height/7);
+        confetti[i] = new Confetti(random(0, width), random(height / 2, height * 2), -height / 7);
     }
 
 }
@@ -317,8 +317,8 @@ function scorePoint() {
 function Card(x, y, n) {
     this.x = x;
     this.y = y;
-    this.h = (width+height)/10;
-    this.w = this.h/7*5;
+    this.h = (width + height) / 10;
+    this.w = this.h / 7 * 5;
     // this.w = 125;
     // this.h = 175;
     this.n = n;
@@ -346,10 +346,10 @@ function Card(x, y, n) {
         // }
         tx = Math.round(n * 100) / 100;
 
-    rectMode(CORNER);
+        rectMode(CORNER);
 
         this.selected = selectedCards.includes(this);
-        if(n == 24 && cards.length == 1) {
+        if (n == 24 && cards.length == 1) {
             this.selected = false;
             this.lifted = false;
         }
@@ -357,7 +357,7 @@ function Card(x, y, n) {
         if (this.lifted) {
             noStroke();
             fill(17, 100);
-            rect(this.x, this.y, this.w, this.h, this.w/5);
+            rect(this.x, this.y, this.w, this.h, this.w / 5);
             if (this.selected) {
                 strokeWeight(5);
                 stroke(255, 50, 50);
@@ -366,7 +366,7 @@ function Card(x, y, n) {
                 stroke(17);
             }
             fill(255);
-            rect(this.x + 5, this.y - 3, this.w, this.h, this.w/5);
+            rect(this.x + 5, this.y - 3, this.w, this.h, this.w / 5);
             fill(255, 100, 100);
             noStroke();
             textSize(this.w / 2);
@@ -376,8 +376,8 @@ function Card(x, y, n) {
             if (this.selected) {
                 noStroke();
                 fill(255, 50, 50);
-                textSize(this.w/5);
-                text(selectedCards.indexOf(this) + 1, this.x + 5 + this.w/5, this.y - 3 + this.w/5);
+                textSize(this.w / 5);
+                text(selectedCards.indexOf(this) + 1, this.x + 5 + this.w / 5, this.y - 3 + this.w / 5);
             }
         } else {
             if (this.selected) {
@@ -387,24 +387,24 @@ function Card(x, y, n) {
                 strokeWeight(2);
                 stroke(17);
             }
-            if(n == 24 && cards.length == 1) {
+            if (n == 24 && cards.length == 1) {
                 stroke(255, 255, 0, 80);
                 strokeWeight(20);
                 noFill();
-                rect(this.x, this.y, this.w, this.h, this.w/5);
+                rect(this.x, this.y, this.w, this.h, this.w / 5);
                 fill(255, 255, 0, 80);
                 stroke(255, 255, 0);
                 strokeWeight(7);
             }
             fill(255);
-            rect(this.x, this.y, this.w, this.h, this.w/5);
+            rect(this.x, this.y, this.w, this.h, this.w / 5);
             textAlign(CENTER, CENTER);
             textSize(this.w / 2);
-            if(n == 24 && cards.length == 1) {
+            if (n == 24 && cards.length == 1) {
                 stroke(255, 255, 0, 80);
                 strokeWeight(10);
                 fill(255, 255, 0);
-            } else{
+            } else {
                 fill(255, 100, 100);
                 noStroke();
             }
@@ -413,8 +413,8 @@ function Card(x, y, n) {
             if (this.selected) {
                 noStroke();
                 fill(255, 50, 50);
-                textSize(this.w/5);
-                text(selectedCards.indexOf(this) + 1, this.x + this.w/5, this.y + this.w/5);
+                textSize(this.w / 5);
+                text(selectedCards.indexOf(this) + 1, this.x + this.w / 5, this.y + this.w / 5);
             }
         }
 
@@ -452,10 +452,10 @@ function Button(x, y, id) {
     this.h = 75;
     this.id = id;
 
-    this.show = function() {
+    this.show = function () {
         rectMode(CENTER);
 
-        switch(this.id) {
+        switch (this.id) {
             case "add":
                 fill(255, 100, 100);
                 break;
@@ -487,55 +487,55 @@ function Button(x, y, id) {
         textAlign(CENTER, CENTER);
         strokeCap(ROUND);
         stroke(255);
-        strokeWeight(this.w/10);
-        switch(this.id) {
+        strokeWeight(this.w / 10);
+        switch (this.id) {
             case "add":
-                line(this.x, this.y - this.h/4, this.x, this.y + this.h/4);
-                line(this.x - this.w/4, this.y, this.x + this.w/4, this.y);
+                line(this.x, this.y - this.h / 4, this.x, this.y + this.h / 4);
+                line(this.x - this.w / 4, this.y, this.x + this.w / 4, this.y);
                 break;
             case "sub":
-                line(this.x - this.w/4, this.y, this.x + this.w/4, this.y);
+                line(this.x - this.w / 4, this.y, this.x + this.w / 4, this.y);
                 break;
             case "mult":
-                line(this.x - this.w/5, this.y - this.h/5, this.x + this.w/5, this.y + this.h / 5);
-                line(this.x + this.w/5, this.y - this.h/5, this.x - this.w/5, this.y + this.h / 5);
+                line(this.x - this.w / 5, this.y - this.h / 5, this.x + this.w / 5, this.y + this.h / 5);
+                line(this.x + this.w / 5, this.y - this.h / 5, this.x - this.w / 5, this.y + this.h / 5);
                 break;
             case "div":
-                line(this.x - this.w/4, this.y, this.x + this.w/4, this.y);
+                line(this.x - this.w / 4, this.y, this.x + this.w / 4, this.y);
                 strokeWeight(12);
-                point(this.x, this.y - this.h/4.5);
-                point(this.x, this.y + this.h/4.5);
+                point(this.x, this.y - this.h / 4.5);
+                point(this.x, this.y + this.h / 4.5);
                 break;
             case "undo":
                 noFill();
-                arc(this.x, this.y + this.h/3, this.w, this.h, PI + PI/3, -PI/3);
+                arc(this.x, this.y + this.h / 3, this.w, this.h, PI + PI / 3, -PI / 3);
                 push()
-                translate(this.x, this.y+ this.h/3);
-                rotate(-PI/6);
-                triangle(0, 0 - this.h/2 - this.w/20, 0, 0 - this.h/2 + this.w/20, 0 - this.w/15, 0 - this.h/2);
+                translate(this.x, this.y + this.h / 3);
+                rotate(-PI / 6);
+                triangle(0, 0 - this.h / 2 - this.w / 20, 0, 0 - this.h / 2 + this.w / 20, 0 - this.w / 15, 0 - this.h / 2);
                 pop();
                 break;
             case "reset":
                 noFill();
-                arc(this.x, this.y, this.w/2, this.h/2, 3/2*PI, PI);
-                triangle(this.x, this.y - this.h/4 - this.w/20, this.x, this.y - this.h/4 + this.w/20, this.x - this.w/15, this.y - this.h/4);
+                arc(this.x, this.y, this.w / 2, this.h / 2, 3 / 2 * PI, PI);
+                triangle(this.x, this.y - this.h / 4 - this.w / 20, this.x, this.y - this.h / 4 + this.w / 20, this.x - this.w / 15, this.y - this.h / 4);
                 break;
             case "next":
                 noFill();
-                line(this.x - this.w/4, this.y, this.x + this.w/4, this.y);
-                triangle(this.x + this.w/4, this.y - this.w/20, this.x + this.w/4, this.y + this.w/20, this.x + this.w/4 + this.w/15, this.y);
+                line(this.x - this.w / 4, this.y, this.x + this.w / 4, this.y);
+                triangle(this.x + this.w / 4, this.y - this.w / 20, this.x + this.w / 4, this.y + this.w / 20, this.x + this.w / 4 + this.w / 15, this.y);
                 break;
         }
     }
 
     this.touchingMouse = function () {
-        return this.x - this.w/2 < mouseX && this.x + this.w/2 > mouseX && this.y - this.h / 2< mouseY && this.y + this.h / 2> mouseY;
+        return this.x - this.w / 2 < mouseX && this.x + this.w / 2 > mouseX && this.y - this.h / 2 < mouseY && this.y + this.h / 2 > mouseY;
     }
 
-    this.update = function() {
-        if(this.touchingMouse()) {
-            if(selectedCards.length == 2) {
-                switch(this.id) {
+    this.update = function () {
+        if (this.touchingMouse()) {
+            if (selectedCards.length == 2) {
+                switch (this.id) {
                     case "add":
                         prevCards = [];
                         cards.forEach(card => {
@@ -586,7 +586,7 @@ function Button(x, y, id) {
                     }
                 }
             }
-            switch(this.id) {
+            switch (this.id) {
                 case "undo":
                     cards = [];
                     selectedCards = [];
