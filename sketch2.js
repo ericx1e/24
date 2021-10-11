@@ -8,7 +8,12 @@ let prevBoard = [];
 let score = 0;
 let info = false;
 let buttons = [];
-let buttonIds = ["add", "sub", "mult", "div", "undo", "reset", "next"];
+let buttonIds = ["add", "sub", "mult", "div", "undo", "reset", "next", "menu"];
+let menuOpen = false;
+let menuX, menuY;
+let menuW = 300;
+let menuH;
+
 
 let confettiColor;
 let confetti = [];
@@ -18,12 +23,14 @@ function setup() {
     canvas = createCanvas(window.innerWidth, window.innerHeight);
     canvas.position(0, 0);
 
+    menuX = width;
+    menuY = 100;
+    menuH = height-100;
 
     for (let i = 0; i < buttonIds.length; i++) {
-        buttons.push(new Button(width - 700 + 100 * i, 50, buttonIds[i]));
+        buttons.push(new Button(width - 775 + 100 * i, 50, buttonIds[i]));
     }
 
-    // cards = [new Card(100, 100, 7),new Card(100, 100, 7),new Card(100, 100, 3),new Card(100, 100, 3)];
     // console.log(checkPossible());
 
     newBoard();
@@ -36,7 +43,7 @@ function setup() {
     //     }
     // }
 }
-//Eric Xie is cute
+
 function windowResized() {
     canvas = createCanvas(window.innerWidth, window.innerHeight);
     canvas.position(0, 0);
@@ -48,13 +55,15 @@ function draw() {
 
 
     let flag = false;
-    for (let i = cards.length - 1; i >= 0; i--) {
-        let card = cards[i];
-        if (!flag && card.update()) {
-            flag = true;
-            cards.splice(i, 1);
-            cards.push(card);
-            // cards.splice(0, 0, card);
+    if(!menuOpen) {
+        for (let i = cards.length - 1; i >= 0; i--) {
+            let card = cards[i];
+            if (!flag && card.update()) {
+                flag = true;
+                cards.splice(i, 1);
+                cards.push(card);
+                // cards.splice(0, 0, card);
+            }
         }
     }
     for (let i = 0; i < cards.length; i++) {
@@ -62,7 +71,16 @@ function draw() {
         card.show();
     }
 
+    if(menuOpen) {
+        menuX = lerp(menuX, width - menuW, 0.1);
+    } else {
+        menuX = lerp(menuX, width, 0.1);
+    }
 
+    fill(0, 100);
+    noStroke();
+    rectMode(CORNER);
+    rect(menuX, menuY, menuW, menuH);
 
     rectMode(CORNER);
 
@@ -108,6 +126,16 @@ function draw() {
 }
 
 function touchStarted() {
+    buttons.forEach(button => {
+        button.update();
+    });
+
+    if(menuOpen) {
+        if(mouseX < width - menuW) {
+            toggleMenu();
+        }
+        return;
+    }
     let flag = false;
     for (let i = cards.length - 1; i >= 0; i--) {
         let card = cards[i];
@@ -128,9 +156,6 @@ function touchStarted() {
         }
     }
 
-    buttons.forEach(button => {
-        button.update();
-    });
     return false;
 }
 
@@ -314,6 +339,14 @@ function scorePoint() {
 
 }
 
+function toggleMenu() {
+    menuOpen = !menuOpen;
+}
+
+function lerp (start, end, amt){
+    return (1-amt)*start+amt*end
+  }
+
 function Card(x, y, n) {
     this.x = x;
     this.y = y;
@@ -388,10 +421,12 @@ function Card(x, y, n) {
                 stroke(17);
             }
             if (n == 24 && cards.length == 1) {
-                stroke(255, 255, 0, 80);
-                strokeWeight(20);
-                noFill();
-                rect(this.x, this.y, this.w, this.h, this.w / 5);
+                for (let i = 0; i < 20; i++) {
+                    stroke(255, 255, 0, 20);
+                    strokeWeight(20-i);
+                    noFill();
+                    rect(this.x, this.y, this.w, this.h, this.w / 5);
+                }
                 fill(255, 255, 0, 80);
                 stroke(255, 255, 0);
                 strokeWeight(7);
@@ -401,14 +436,17 @@ function Card(x, y, n) {
             textAlign(CENTER, CENTER);
             textSize(this.w / 2);
             if (n == 24 && cards.length == 1) {
-                stroke(255, 255, 0, 80);
-                strokeWeight(10);
-                fill(255, 255, 0);
+                for (let i = 0; i < 10; i++) {
+                    stroke(255, 255, 0, 15);
+                    strokeWeight(10-i);
+                    fill(255, 255, 0);
+                    text(tx, this.x + this.w / 2, this.y + this.h / 2);
+                }
             } else {
                 fill(255, 100, 100);
                 noStroke();
+                text(tx, this.x + this.w / 2, this.y + this.h / 2);
             }
-            text(tx, this.x + this.w / 2, this.y + this.h / 2);
 
             if (this.selected) {
                 noStroke();
@@ -477,6 +515,9 @@ function Button(x, y, id) {
             case "next":
                 fill(200);
                 break;
+            case "menu":
+                fill(250);
+                break;
         }
 
         noStroke();
@@ -524,6 +565,13 @@ function Button(x, y, id) {
                 noFill();
                 line(this.x - this.w / 4, this.y, this.x + this.w / 4, this.y);
                 triangle(this.x + this.w / 4, this.y - this.w / 20, this.x + this.w / 4, this.y + this.w / 20, this.x + this.w / 4 + this.w / 15, this.y);
+                break;
+            case "menu":
+                stroke(200);
+                // strokeWeight(this.w / 12);
+                line(this.x - this.w / 4, this.y - this.h / 6, this.x + this.w / 4, this.y - this.h / 6);
+                line(this.x - this.w / 4, this.y, this.x + this.w / 4, this.y);
+                line(this.x - this.w / 4, this.y + this.h / 6, this.x + this.w / 4, this.y + this.h / 6);
                 break;
         }
     }
@@ -604,6 +652,8 @@ function Button(x, y, id) {
                 case "next":
                     newBoard();
                     break;
+                case "menu":
+                    toggleMenu(); 
             }
         }
     }

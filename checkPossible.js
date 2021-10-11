@@ -111,6 +111,10 @@ function checkPossible() {
                                             workingA.push(a);
                                             workingB.push(b);
                                             workingC.push(c);
+                                            // console.log(p, i, a, b, c);
+                                            // console.log(inner1);
+                                            // console.log(inner);
+                                            // console.log(result);
                                         }
                                         break;
                                     case 1:
@@ -358,6 +362,7 @@ function checkPossible() {
                                         break;
                                 }
 
+                                break;
                             case 1:
                                 switch (c) {
                                     case 0:
@@ -685,6 +690,7 @@ function checkPossible() {
                                         }
                                         break;
                                 }
+                                break;
                             case 2:
                                 switch (c) {
                                     case 0:
@@ -1011,6 +1017,7 @@ function checkPossible() {
                                         }
                                         break;
                                 }
+                                break;
                             case 3:
                                 switch (c) {
                                     case 0:
@@ -1331,6 +1338,7 @@ function checkPossible() {
                                         //if(result == 24) return true
                                         break;
                                 }
+                                break;
                             case 4:
 
                                 switch (c) {
@@ -1659,6 +1667,7 @@ function checkPossible() {
                                         }
                                         break;
                                 }
+                                break;
                         }
 
                     }
@@ -1667,7 +1676,7 @@ function checkPossible() {
         }
     });
 
-    for (let i = 0; i < workingP.length - 1; i++) {
+    for (let i = 0; i < workingP.length; i++) {
         // console.log(workingP[i], workingI[i], workingA[i], workingB[i], workingC[i]);
         // if (equationString(workingP[i], workingI[i], workingA[i], workingB[i], workingC[i]) == equationString(workingP[i + 1], workingI[i + 1], workingA[i + 1], workingB[i + 1], workingC[i + 1])) {
         console.log(equationString(workingP[i], workingI[i], workingA[i], workingB[i], workingC[i]));
