@@ -265,8 +265,9 @@ function newBoard() {
     addNewCard();
     addNewCard();
     addNewCard();
+    // cards = [new Card(100, 100, 1),new Card(200, 100, 3),new Card(300, 100, 4),new Card(400, 100, 6)];
 
-    while (!checkPossible()) {
+    while (checkPossible() ==0) {
         cards = [];
         for (let i = 0; i < 4; i++) {
             cards.push(new Card(random(0, width - 125), random(100, height - 175), Math.floor(random(1, 14))));

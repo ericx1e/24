@@ -1683,7 +1683,10 @@ function checkPossible() {
         // }
     }
 
-    return works;
+    if(works) {
+        return workingP.length;
+    }
+    return 0;
 }
 
 function equationString(p, i, a, b, c) {
