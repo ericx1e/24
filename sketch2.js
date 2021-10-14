@@ -14,24 +14,16 @@ let menuOpen = false;
 let menuX, menuY;
 let menuW = 300;
 let menuH;
-
+let canvas;
 
 let confettiColor;
 let confetti = [];
 
 function setup() {
-    confettiColor = [color('#00aeef'), color('#ec008c'), color('#72c8b6'), color('#d198f9')];
     canvas = createCanvas(window.innerWidth, window.innerHeight);
     canvas.position(0, 0);
-    buttonPanelH = height/8;
-
-    menuX = width;
-    menuY = buttonPanelH;
-    menuH = height-buttonPanelH;
-
-    for (let i = 0; i < buttonIds.length; i++) {
-        buttons.push(new Button(width - 775 + buttonPanelH * i, 50, buttonIds[i]));
-    }
+    confettiColor = [color('#00aeef'), color('#ec008c'), color('#72c8b6'), color('#d198f9')];
+    initialize();
 
     // console.log(checkPossible());
 
@@ -49,6 +41,34 @@ function setup() {
 function windowResized() {
     canvas = createCanvas(window.innerWidth, window.innerHeight);
     canvas.position(0, 0);
+    initialize(); 
+}
+
+function initialize() {
+    buttonPanelH = (width + 0.25 * height) / 15;
+
+    menuX = width;
+    menuY = buttonPanelH;
+    menuH = height-buttonPanelH;
+
+    buttons = [];
+    for (let i = 0; i < buttonIds.length; i++) {
+        buttons.push(new Button(width - buttonPanelH * (buttonIds.length - 0.5) + buttonPanelH * i, buttonPanelH/2, buttonPanelH*4/5, buttonIds[i]));
+    }
+    
+    // for (let i = 0; i < cards.length; i++) {
+    //     prevCards[i] = new Card(Math.min(prevCards[i].x, width-prevCards[i].w), Math.min(prevCards[i].y, height - prevCards[i].h), prevCards[i].n);
+    // }
+
+    // for (let i = 0; i < cards.length; i++) {
+    //     intialCards[i] = new Card(Math.min(intialCards[i].x, width-intialCards[i].w), Math.min(intialCards[i].y, height - intialCards[i].h), intialCards[i].n);
+    // }
+
+    // for (let i = 0; i < cards.length; i++) {
+    //     cards[i] = new Card(Math.min(cards[i].x, width-cards[i].w), Math.min(cards[i].y, height - cards[i].h), cards[i].n);
+    // }
+
+    newBoard(); 
 }
 
 
@@ -89,11 +109,11 @@ function draw() {
     noStroke();
     fill(70);
     rect(0, 0, width, buttonPanelH);
-    textSize(width / 30);
+    textSize(buttonPanelH/2);
     fill(255);
     noStroke();
     textAlign(LEFT, CENTER);
-    text("score: " + score, 50, 50);
+    text(score, buttonPanelH/2, buttonPanelH/2);
 
 
     buttons.forEach(button => {
@@ -487,11 +507,11 @@ function Card(x, y, n) {
     }
 }
 
-function Button(x, y, id) {
+function Button(x, y, s, id) {
     this.x = x;
     this.y = y;
-    this.w = 75;
-    this.h = 75;
+    this.w = s;
+    this.h = s;
     this.id = id;
 
     this.show = function () {
@@ -526,7 +546,7 @@ function Button(x, y, id) {
 
         noStroke();
 
-        rect(this.x, this.y, this.w, this.h, 20);
+        rect(this.x, this.y, this.w, this.h, this.w/3);
 
         fill(255);
         textAlign(CENTER, CENTER);
@@ -547,7 +567,7 @@ function Button(x, y, id) {
                 break;
             case "div":
                 line(this.x - this.w / 4, this.y, this.x + this.w / 4, this.y);
-                strokeWeight(12);
+                strokeWeight(this.w/6);
                 point(this.x, this.y - this.h / 4.5);
                 point(this.x, this.y + this.h / 4.5);
                 break;
