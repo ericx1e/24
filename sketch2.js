@@ -9,6 +9,7 @@ let score = 0;
 let info = false;
 let buttons = [];
 let buttonIds = ["add", "sub", "mult", "div", "undo", "reset", "next", "menu"];
+let buttonPanelH;
 let menuOpen = false;
 let menuX, menuY;
 let menuW = 300;
@@ -22,13 +23,14 @@ function setup() {
     confettiColor = [color('#00aeef'), color('#ec008c'), color('#72c8b6'), color('#d198f9')];
     canvas = createCanvas(window.innerWidth, window.innerHeight);
     canvas.position(0, 0);
+    buttonPanelH = height/8;
 
     menuX = width;
-    menuY = 100;
-    menuH = height-100;
+    menuY = buttonPanelH;
+    menuH = height-buttonPanelH;
 
     for (let i = 0; i < buttonIds.length; i++) {
-        buttons.push(new Button(width - 775 + 100 * i, 50, buttonIds[i]));
+        buttons.push(new Button(width - 775 + buttonPanelH * i, 50, buttonIds[i]));
     }
 
     // console.log(checkPossible());
@@ -86,7 +88,7 @@ function draw() {
 
     noStroke();
     fill(70);
-    rect(0, 0, width, 100);
+    rect(0, 0, width, buttonPanelH);
     textSize(width / 30);
     fill(255);
     noStroke();
@@ -267,11 +269,12 @@ function newBoard() {
     addNewCard();
     // cards = [new Card(100, 100, 1),new Card(200, 100, 3),new Card(300, 100, 4),new Card(400, 100, 6)];
 
-    while (checkPossible() ==0) {
+    while (checkPossible() == 0) {
         cards = [];
-        for (let i = 0; i < 4; i++) {
-            cards.push(new Card(random(0, width - 125), random(100, height - 175), Math.floor(random(1, 14))));
-        }
+        addNewCard();
+        addNewCard();
+        addNewCard();
+        addNewCard();
     }
 
     prevCards = [];
@@ -293,10 +296,10 @@ function addNewCard() {
     let h = (width + height) / 10;
     let w = h / 7 * 5;
     let randX = random(0, width - w);
-    let randY = random(100, height - h);
+    let randY = random(buttonPanelH, height - h);
     while (locationTaken(randX, randY)) {
         randX = random(0, width - w);
-        randY = random(100, height - h);
+        randY = random(buttonPanelH, height - h);
     }
     cards.push(new Card(randX, randY, Math.floor(random(1, 14))));
 }
