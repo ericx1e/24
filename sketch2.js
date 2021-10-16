@@ -12,9 +12,15 @@ let buttonIds = ["add", "sub", "mult", "div", "undo", "reset", "next", "menu"];
 let buttonPanelH;
 let menuOpen = false;
 let menuX, menuY;
-let menuW = 300;
+let menuW;
 let menuH;
 let canvas;
+let menuButtons = [];
+let menuButtonIds = ["randomloc", "allpossible", "confetti", "facenumbers"];
+let spawnRandomLocation = true;
+let allPossible = true;
+let isConfetti = true;
+let faceNumbers = true;
 
 let confettiColor;
 let confetti = [];
@@ -41,21 +47,27 @@ function setup() {
 function windowResized() {
     canvas = createCanvas(window.innerWidth, window.innerHeight);
     canvas.position(0, 0);
-    initialize(); 
+    initialize();
 }
 
 function initialize() {
     buttonPanelH = (width + 0.25 * height) / 15;
 
+    menuW = width / 4;
     menuX = width;
     menuY = buttonPanelH;
-    menuH = height-buttonPanelH;
+    menuH = height - buttonPanelH;
 
     buttons = [];
     for (let i = 0; i < buttonIds.length; i++) {
-        buttons.push(new Button(width - buttonPanelH * (buttonIds.length - 0.5) + buttonPanelH * i, buttonPanelH/2, buttonPanelH*4/5, buttonIds[i]));
+        buttons.push(new Button(width - buttonPanelH * (buttonIds.length - 0.5) + buttonPanelH * i, buttonPanelH / 2, buttonPanelH * 4 / 5, buttonIds[i]));
     }
-    
+
+    menuButtons = [];
+    for (let i = 0; i < menuButtonIds.length; i++) {
+        menuButtons.push(new SlidingButton(width + menuW * 3 / 4, buttonPanelH * 1.5 + buttonPanelH / 2 * i, buttonPanelH / 2, menuButtonIds[i]));
+    }
+
     // for (let i = 0; i < cards.length; i++) {
     //     prevCards[i] = new Card(Math.min(prevCards[i].x, width-prevCards[i].w), Math.min(prevCards[i].y, height - prevCards[i].h), prevCards[i].n);
     // }
@@ -68,7 +80,7 @@ function initialize() {
     //     cards[i] = new Card(Math.min(cards[i].x, width-cards[i].w), Math.min(cards[i].y, height - cards[i].h), cards[i].n);
     // }
 
-    newBoard(); 
+    newBoard();
 }
 
 
@@ -77,7 +89,7 @@ function draw() {
 
 
     let flag = false;
-    if(!menuOpen) {
+    if (!menuOpen) {
         for (let i = cards.length - 1; i >= 0; i--) {
             let card = cards[i];
             if (!flag && card.update()) {
@@ -93,7 +105,7 @@ function draw() {
         card.show();
     }
 
-    if(menuOpen) {
+    if (menuOpen) {
         menuX = lerp(menuX, width - menuW, 0.1);
     } else {
         menuX = lerp(menuX, width, 0.1);
@@ -104,16 +116,31 @@ function draw() {
     rectMode(CORNER);
     rect(menuX, menuY, menuW, menuH);
 
-    rectMode(CORNER);
+    menuButtons.forEach(button => {
+        if (menuOpen) {
+            button.x += lerp(menuX, width - menuW, 0.1) - menuX;
+            button.buttonX += lerp(menuX, width - menuW, 0.1) - menuX;
+        } else {
+            button.x += lerp(menuX, width, 0.1) - menuX;
+            button.buttonX += lerp(menuX, width, 0.1) - menuX;
+        }
+        // button.buttonX = menuX + menuW / 2;
+        button.update();
+        button.show();
+    });
 
+
+
+    //Button panel
+    rectMode(CORNER);
     noStroke();
     fill(70);
     rect(0, 0, width, buttonPanelH);
-    textSize(buttonPanelH/2);
+    textSize(buttonPanelH / 2);
     fill(255);
     noStroke();
     textAlign(LEFT, CENTER);
-    text(score, buttonPanelH/2, buttonPanelH/2);
+    text(score, buttonPanelH / 2, buttonPanelH / 2);
 
 
     buttons.forEach(button => {
@@ -152,11 +179,17 @@ function touchStarted() {
         button.update();
     });
 
-    if(menuOpen) {
-        if(mouseX < width - menuW) {
+    if (menuOpen) {
+        menuButtons.forEach(button => {
+            button.click();
+        });
+    }
+
+    if (menuOpen) {
+        if (mouseX < width - menuW) {
             toggleMenu();
         }
-        return;
+        return false;
     }
     let flag = false;
     for (let i = cards.length - 1; i >= 0; i--) {
@@ -283,18 +316,42 @@ function newBoard() {
 
     cards = [];
 
-    addNewCard();
-    addNewCard();
-    addNewCard();
-    addNewCard();
-    // cards = [new Card(100, 100, 1),new Card(200, 100, 3),new Card(300, 100, 4),new Card(400, 100, 6)];
+    if (spawnRandomLocation) {
+        for (let i = 0; i < 4; i++) {
+            let h = (width + height) / 10;
+            let w = h / 7 * 5;
+            let randX = random(0, width - w);
+            let randY = random(buttonPanelH, height - h);
+            while (locationTaken(randX, randY)) {
+                randX = random(0, width - w);
+                randY = random(buttonPanelH, height - h);
+            }
+            cards.push(new Card(randX, randY, Math.floor(random(1, 14))));
+        }
+        // cards = [new Card(100, 100, 1),new Card(200, 100, 3),new Card(300, 100, 4),new Card(400, 100, 6)];
 
-    while (checkPossible() == 0) {
-        cards = [];
-        addNewCard();
-        addNewCard();
-        addNewCard();
-        addNewCard();
+        if (allPossible) {
+            while (checkPossible() == 0) {
+                cards = [];
+                for (let i = 0; i < 4; i++) {
+                    let h = (width + height) / 10;
+                    let w = h / 7 * 5;
+                    let randX = random(0, width - w);
+                    let randY = random(buttonPanelH, height - h);
+                    while (locationTaken(randX, randY)) {
+                        randX = random(0, width - w);
+                        randY = random(buttonPanelH, height - h);
+                    }
+                    cards.push(new Card(randX, randY, Math.floor(random(1, 14))));
+                }
+            }
+        }
+    } else {
+        for (let i = 0; i < 4; i++) {
+            let h = (width + height) / 10;
+            let w = h / 7 * 5;
+            cards.push(new Card(width / 8 * i + width / 4 + (width / 8 - w) / 2, height / 2 + buttonPanelH / 2 - h / 2, Math.floor(random(1, 14))));
+        }
     }
 
     prevCards = [];
@@ -312,17 +369,6 @@ function newBoard() {
     // console.log(checkPossible());
 }
 
-function addNewCard() {
-    let h = (width + height) / 10;
-    let w = h / 7 * 5;
-    let randX = random(0, width - w);
-    let randY = random(buttonPanelH, height - h);
-    while (locationTaken(randX, randY)) {
-        randX = random(0, width - w);
-        randY = random(buttonPanelH, height - h);
-    }
-    cards.push(new Card(randX, randY, Math.floor(random(1, 14))));
-}
 
 function permutator(inputArr) {
     var results = [];
@@ -357,8 +403,12 @@ function locationTaken(x, y) {
 
 function scorePoint() {
     score++;
-    for (let i = 0; i < 150; i++) {
-        confetti[i] = new Confetti(random(0, width), random(height / 2, height * 2), -height / 7);
+    if (isConfetti) {
+        for (let i = 0; i < 150; i++) {
+            confetti[i] = new Confetti(random(0, width), random(height / 2, height * 2), -height / 7);
+        }
+    } else {
+        newBoard();
     }
 
 }
@@ -367,9 +417,9 @@ function toggleMenu() {
     menuOpen = !menuOpen;
 }
 
-function lerp (start, end, amt){
-    return (1-amt)*start+amt*end
-  }
+function lerp(start, end, amt) {
+    return (1 - amt) * start + amt * end
+}
 
 function Card(x, y, n) {
     this.x = x;
@@ -385,23 +435,23 @@ function Card(x, y, n) {
     this.show = function () {
         // noStroke();
         let tx;
-        // switch(this.n) {
-        //     case 1:
-        //         tx = 'A';
-        //         break;
-        //     case 11:
-        //         tx = 'J';
-        //         break;
-        //     case 12:
-        //         tx = 'Q';
-        //         break;
-        //     case 13:
-        //         tx = 'K';
-        //         break;
-        //     default:
-        //         break;
-        // }
         tx = Math.round(n * 100) / 100;
+        if (!faceNumbers) {
+            switch (this.n) {
+                case 1:
+                    tx = 'A';
+                    break;
+                case 11:
+                    tx = 'J';
+                    break;
+                case 12:
+                    tx = 'Q';
+                    break;
+                case 13:
+                    tx = 'K';
+                    break;
+            }
+        }
 
         rectMode(CORNER);
 
@@ -447,7 +497,7 @@ function Card(x, y, n) {
             if (n == 24 && cards.length == 1) {
                 for (let i = 0; i < 20; i++) {
                     stroke(255, 255, 0, 20);
-                    strokeWeight(20-i);
+                    strokeWeight(20 - i);
                     noFill();
                     rect(this.x, this.y, this.w, this.h, this.w / 5);
                 }
@@ -462,7 +512,7 @@ function Card(x, y, n) {
             if (n == 24 && cards.length == 1) {
                 for (let i = 0; i < 10; i++) {
                     stroke(255, 255, 0, 15);
-                    strokeWeight(10-i);
+                    strokeWeight(10 - i);
                     fill(255, 255, 0);
                     text(tx, this.x + this.w / 2, this.y + this.h / 2);
                 }
@@ -546,7 +596,7 @@ function Button(x, y, s, id) {
 
         noStroke();
 
-        rect(this.x, this.y, this.w, this.h, this.w/3);
+        rect(this.x, this.y, this.w, this.h, this.w / 3);
 
         fill(255);
         textAlign(CENTER, CENTER);
@@ -567,7 +617,7 @@ function Button(x, y, s, id) {
                 break;
             case "div":
                 line(this.x - this.w / 4, this.y, this.x + this.w / 4, this.y);
-                strokeWeight(this.w/6);
+                strokeWeight(this.w / 6);
                 point(this.x, this.y - this.h / 4.5);
                 point(this.x, this.y + this.h / 4.5);
                 break;
@@ -677,8 +727,97 @@ function Button(x, y, s, id) {
                     newBoard();
                     break;
                 case "menu":
-                    toggleMenu(); 
+                    toggleMenu();
             }
         }
+    }
+}
+
+function SlidingButton(x, y, w, id) {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = this.w / 2;
+    this.toggle = false; //false is left, true is right
+    this.buttonX = this.x + this.w / 4;
+    this.color = 150;
+    switch (id) {
+        case "randomloc":
+            this.toggle = spawnRandomLocation;
+            break;
+        case "allpossible":
+            this.toggle = allPossible;
+            break;
+        case "confetti":
+            this.toggle = isConfetti;
+            break;
+        case "facenumbers":
+            this.toggle = faceNumbers;
+            break;
+    }
+
+    this.show = function () {
+        let tx = "";
+        textAlign(RIGHT, CENTER);
+        switch (id) {
+            case "randomloc":
+                tx = "Random Card Locations";
+                break;
+            case "allpossible":
+                tx = "Only possible combinations";
+                break;
+            case "confetti":
+                tx = "Confetti";
+                break;
+            case "facenumbers":
+                tx = "Face card numbers";
+                break;
+        }
+
+        fill(240);
+        textSize(this.h / 1.5);
+        text(tx, this.x - this.h * 1.25, this.y);
+
+        rectMode(CENTER);
+        noStroke();
+        fill(this.color, this.color, this.color);
+        rect(this.x, this.y, this.w, this.h, this.h / 2);
+        fill(200);
+        ellipse(this.buttonX, this.y, this.h * 9 / 10, this.h * 9 / 10);
+
+    }
+
+    this.update = function () {
+        if (this.toggle) {
+            this.buttonX = lerp(this.buttonX, this.x + this.w / 4, 0.1);
+            this.color += 4 * (lerp(this.buttonX, this.x + this.w / 4, 0.2) - this.buttonX);
+        } else {
+            this.buttonX = lerp(this.buttonX, this.x - this.w / 4, 0.1);
+            this.color += 4 * (lerp(this.buttonX, this.x - this.w / 4, 0.2) - this.buttonX);
+        }
+        switch (id) {
+            case "randomloc":
+                spawnRandomLocation = this.toggle;
+                break;
+            case "allpossible":
+                allPossible = this.toggle;
+                break;
+            case "confetti":
+                isConfetti = this.toggle;
+                break;
+            case "facenumbers":
+                faceNumbers = this.toggle;
+                break;
+        }
+    }
+
+    this.click = function () {
+        if (this.touchingMouse()) {
+            this.toggle = !this.toggle;
+        }
+    }
+
+    this.touchingMouse = function () {
+        return this.x - this.w / 2 < mouseX && this.x + this.w / 2 > mouseX && this.y - this.h / 2 < mouseY && this.y + this.h / 2 > mouseY;
     }
 }
