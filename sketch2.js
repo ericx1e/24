@@ -53,7 +53,7 @@ function windowResized() {
 function initialize() {
     buttonPanelH = (width + 0.25 * height) / 15;
 
-    menuW = width / 4;
+    menuW = (2 * width + height) / 10;
     menuX = width;
     menuY = buttonPanelH;
     menuH = height - buttonPanelH;
