@@ -352,6 +352,16 @@ function newBoard() {
             let w = h / 7 * 5;
             cards.push(new Card(width / 8 * i + width / 4 + (width / 8 - w) / 2, height / 2 + buttonPanelH / 2 - h / 2, Math.floor(random(1, 14))));
         }
+        if (allPossible) {
+            while (checkPossible() == 0) {
+                cards = [];
+                for (let i = 0; i < 4; i++) {
+                    let h = (width + height) / 10;
+                    let w = h / 7 * 5;
+                    cards.push(new Card(width / 8 * i + width / 4 + (width / 8 - w) / 2, height / 2 + buttonPanelH / 2 - h / 2, Math.floor(random(1, 14))));
+                }
+            }
+        }
     }
 
     prevCards = [];
