@@ -53,7 +53,7 @@ function windowResized() {
 function initialize() {
     buttonPanelH = (width + 0.25 * height) / 15;
 
-    menuW = (2 * width + height) / 10;
+    menuW = (2 * width +  2 * height) / 10;
     menuX = width;
     menuY = buttonPanelH;
     menuH = height - buttonPanelH;
@@ -65,7 +65,7 @@ function initialize() {
 
     menuButtons = [];
     for (let i = 0; i < menuButtonIds.length; i++) {
-        menuButtons.push(new SlidingButton(width + menuW * 3 / 4, buttonPanelH * 1.5 + buttonPanelH / 2 * i, buttonPanelH / 2, menuButtonIds[i]));
+        menuButtons.push(new SlidingButton(width + menuW * 3 / 4, buttonPanelH + menuW / 6 * (i + 1), menuW / 7, menuButtonIds[i]));
     }
 
     // for (let i = 0; i < cards.length; i++) {
