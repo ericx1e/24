@@ -76,11 +76,11 @@ function initialize() {
     //     intialCards[i] = new Card(Math.min(intialCards[i].x, width-intialCards[i].w), Math.min(intialCards[i].y, height - intialCards[i].h), intialCards[i].n);
     // }
 
-    // for (let i = 0; i < cards.length; i++) {
-    //     cards[i] = new Card(Math.min(cards[i].x, width-cards[i].w), Math.min(cards[i].y, height - cards[i].h), cards[i].n);
-    // }
+    for (let i = 0; i < cards.length; i++) {
+        cards[i] = new Card(Math.min(cards[i].x, width-cards[i].w), Math.min(cards[i].y, height - cards[i].h), cards[i].n);
+    }
 
-    newBoard();
+    // newBoard();
 }
 
 

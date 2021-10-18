@@ -1,7 +1,5 @@
 //pain 
 
-//1 3 4 6 ;-;
-
 function checkPossible() {
     let numbers = [];
     cards.forEach(card => {
