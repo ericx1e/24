@@ -15,7 +15,7 @@ let menuX, menuY;
 let menuW;
 let menuH;
 let canvas;
-let menuButtons = [];
+let menuSlidingButton = [];
 let menuButtonIds = ["randomloc", "allpossible", "confetti", "facenumbers"];
 let spawnRandomLocation = true;
 let allPossible = true;
@@ -63,9 +63,9 @@ function initialize() {
         buttons.push(new Button(width - buttonPanelH * (buttonIds.length - 0.5) + buttonPanelH * i, buttonPanelH / 2, buttonPanelH * 4 / 5, buttonIds[i]));
     }
 
-    menuButtons = [];
+    menuSlidingButton = [];
     for (let i = 0; i < menuButtonIds.length; i++) {
-        menuButtons.push(new SlidingButton(width + menuW * 3 / 4, buttonPanelH + menuW / 6 * (i + 1), menuW / 7, menuButtonIds[i]));
+        menuSlidingButton.push(new SlidingButton(width + menuW * 3 / 4, buttonPanelH + menuW / 6 * (i + 1), menuW / 7, menuButtonIds[i]));
     }
 
     // for (let i = 0; i < cards.length; i++) {
@@ -116,7 +116,7 @@ function draw() {
     rectMode(CORNER);
     rect(menuX, menuY, menuW, menuH);
 
-    menuButtons.forEach(button => {
+    menuSlidingButton.forEach(button => {
         if (menuOpen) {
             button.x += lerp(menuX, width - menuW, 0.1) - menuX;
             button.buttonX += lerp(menuX, width - menuW, 0.1) - menuX;
@@ -180,7 +180,7 @@ function touchStarted() {
     });
 
     if (menuOpen) {
-        menuButtons.forEach(button => {
+        menuSlidingButton.forEach(button => {
             button.click();
         });
     }
@@ -794,6 +794,11 @@ function SlidingButton(x, y, w, id) {
         rect(this.x, this.y, this.w, this.h, this.h / 2);
         fill(200);
         ellipse(this.buttonX, this.y, this.h * 9 / 10, this.h * 9 / 10);
+
+        fill(255);
+        textAlign(CENTER, CENTER);
+        textSize(this.h/3);
+        text(this.toggle ? "ON" : "OFF", this.buttonX, this.y);
 
     }
 
