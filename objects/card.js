@@ -110,6 +110,9 @@ function Card(x, y, n) {
     }
 
     this.update = function () {
+        if(isTutorial) {
+            return;
+        }
         if (this.lifted) {
             this.x += mouseX - pmouseX;
             this.y += mouseY - pmouseY;

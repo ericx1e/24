@@ -33,11 +33,18 @@ function Button(x, y, s, id) {
             case "menu":
                 fill(250);
                 break;
+            case "?":
+                fill(170);
+                break;
         }
 
         noStroke();
 
-        rect(this.x, this.y, this.w, this.h, this.w / 3);
+        if(this.id == "?") {
+            ellipse(this.x, this.y, this.w);
+        } else {
+            rect(this.x, this.y, this.w, this.h, this.w / 3);
+        }
 
         fill(255);
         textAlign(CENTER, CENTER);
@@ -87,6 +94,13 @@ function Button(x, y, s, id) {
                 line(this.x - this.w / 4, this.y - this.h / 6, this.x + this.w / 4, this.y - this.h / 6);
                 line(this.x - this.w / 4, this.y, this.x + this.w / 4, this.y);
                 line(this.x - this.w / 4, this.y + this.h / 6, this.x + this.w / 4, this.y + this.h / 6);
+                break;
+            case "?":
+                textSize(this.w/1.5);
+                fill(230);
+                noStroke();
+                textAlign(CENTER, CENTER);
+                text("?", this.x, this.y);
                 break;
         }
     }
@@ -169,6 +183,12 @@ function Button(x, y, s, id) {
                     break;
                 case "menu":
                     toggleMenu();
+                    break;
+                case "?":
+                    isTutorial = true;
+                    wut = true;
+                    // tutorial();
+                    break;
             }
         }
     }

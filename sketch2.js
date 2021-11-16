@@ -21,6 +21,8 @@ let spawnRandomLocation = true;
 let allPossible = true;
 let isConfetti = true;
 let faceNumbers = true;
+let isTutorial = false;
+let ericLink;
 
 let confettiColor;
 let confetti = [];
@@ -52,6 +54,14 @@ function windowResized() {
 
 function initialize() {
     buttonPanelH = (width + 0.25 * height) / 15;
+    if(ericLink!=null) {
+        ericLink.remove();
+    }
+    ericLink = createA('https://github.com/ericx1e', 'made by Eric Xie', '_blank');
+    ericLink.style('font-size', width/50 + 'px');
+    ericLink.style('color', '#ff0000');
+    ericLink.position(width/2 - 6.5*width/100, height/2 + height*9.5/25 );
+    ericLink.hide();
 
     menuW = (2 * width +  2 * height) / 10;
     menuX = width;
@@ -62,6 +72,8 @@ function initialize() {
     for (let i = 0; i < buttonIds.length; i++) {
         buttons.push(new Button(width - buttonPanelH * (buttonIds.length - 0.5) + buttonPanelH * i, buttonPanelH / 2, buttonPanelH * 4 / 5, buttonIds[i]));
     }
+    buttons.push(new Button(buttonPanelH / 2, height -  buttonPanelH / 2, buttonPanelH/2, "?"));
+
 
     menuSlidingButton = [];
     for (let i = 0; i < menuButtonIds.length; i++) {
@@ -86,7 +98,7 @@ function initialize() {
 
 function draw() {
     background(51);
-
+    // ericLink.style('font', 'Helvetica')
 
     let flag = false;
     if (!menuOpen) {
@@ -161,6 +173,27 @@ function draw() {
     if (confetti.length < 75 && confetti.length > 0) {
         newBoard();
     }
+    if(isTutorial) {
+        ericLink.show();
+        rectMode(CENTER);
+        noStroke();
+        fill(0, 200);
+        rect(width/2, height/2, width*9.5/10, height*9.5/10, width*9/200);
+        fill(255);
+        textAlign(CENTER, TOP);
+        textSize(width/20);
+        textFont("Monospace");
+
+        text("welcome to 24 the game!", width/2, height/2-height*9.5/22);
+        textSize(width/50);
+        text("\n\n\nthe objective of the game is to use all the cards to create 24\nyou must use all four cards and only be left with the 24 card\nclick on cards to select them\nonce you have two cards selected, choose an operation to combine them\naddition ('a','+')\tmultiplication ('m','*')\ndivision ('d','/')\tsubtraction ('s','-')\nundo ('u')\treset ('r')\tnext ('n')\n\n\n(click anywhere to close)", width/2, height/2-height*9.5/22);
+        
+
+        textFont('Helvetica');
+    } else {
+        ericLink.hide();
+    }
+    textFont();
 
     noCursor();
     if (mouseIsPressed) {
@@ -174,7 +207,12 @@ function draw() {
     line(mouseX, mouseY, pmouseX, pmouseY);
 }
 
+let wut = false;
+
 function touchStarted() {
+    if(isTutorial) {
+        return;
+    }
     buttons.forEach(button => {
         button.update();
     });
@@ -214,7 +252,19 @@ function touchStarted() {
     return false;
 }
 
+function touchEnded() {
+    if(isTutorial && !wut) {
+        isTutorial = false;
+        return;
+    }
+    wut = false;
+    return false;
+}
+
 function keyTyped() {
+    if(isTutorial) {
+        return;
+    }
     if (key == ' ') {
     }
 
