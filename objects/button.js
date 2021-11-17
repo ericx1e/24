@@ -118,40 +118,56 @@ function Button(x, y, s, id) {
                         cards.forEach(card => {
                             prevCards.push(card);
                         });
-                        cards.push(new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n + selectedCards[1].n));
+                        newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n + selectedCards[1].n);
+                        cards.push(newCard);
                         cards.splice(cards.indexOf(selectedCards[0]), 1);
                         cards.splice(cards.indexOf(selectedCards[1]), 1);
                         selectedCards = [];
+                        if(selectAfterOperation) {
+                            selectedCards.push(newCard);
+                        }
                         break;
                     case "sub":
                         prevCards = [];
                         cards.forEach(card => {
                             prevCards.push(card);
                         });
-                        cards.push(new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n - selectedCards[1].n));
+                        newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n - selectedCards[1].n);
+                        cards.push(newCard);
                         cards.splice(cards.indexOf(selectedCards[0]), 1);
                         cards.splice(cards.indexOf(selectedCards[1]), 1);
                         selectedCards = [];
+                        if(selectAfterOperation) {
+                            selectedCards.push(newCard);
+                        }
                         break;
                     case "mult":
                         prevCards = [];
                         cards.forEach(card => {
                             prevCards.push(card);
                         });
-                        cards.push(new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n * selectedCards[1].n));
+                        newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n * selectedCards[1].n);
+                        cards.push(newCard);
                         cards.splice(cards.indexOf(selectedCards[0]), 1);
                         cards.splice(cards.indexOf(selectedCards[1]), 1);
                         selectedCards = [];
+                        if(selectAfterOperation) {
+                            selectedCards.push(newCard);
+                        }
                         break;
                     case "div":
                         prevCards = [];
                         cards.forEach(card => {
                             prevCards.push(card);
                         });
-                        cards.push(new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n / selectedCards[1].n));
+                        newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n / selectedCards[1].n);
+                        cards.push(newCard);
                         cards.splice(cards.indexOf(selectedCards[0]), 1);
                         cards.splice(cards.indexOf(selectedCards[1]), 1);
                         selectedCards = [];
+                        if(selectAfterOperation) {
+                            selectedCards.push(newCard);
+                        }
                         break;
                 }
 

@@ -16,12 +16,13 @@ let menuW;
 let menuH;
 let canvas;
 let menuSlidingButton = [];
-let menuButtonIds = ["randomloc", "allpossible", "confetti", "facenumbers"];
+let menuButtonIds = ["randomloc", "allpossible", "confetti", "facenumbers", "autoselect"];
 let spawnRandomLocation = true;
 let allPossible = true;
 let isConfetti = true;
 let faceNumbers = true;
-let isTutorial = false;
+let selectAfterOperation = false;
+let isTutorial = true;
 let ericLink;
 
 let confettiColor;
@@ -278,10 +279,14 @@ function keyTyped() {
             cards.forEach(card => {
                 prevCards.push(card);
             });
-            cards.push(new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n + selectedCards[1].n));
+            newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n + selectedCards[1].n);
+            cards.push(newCard);
             cards.splice(cards.indexOf(selectedCards[0]), 1);
             cards.splice(cards.indexOf(selectedCards[1]), 1);
             selectedCards = [];
+            if(selectAfterOperation) {
+                selectedCards.push(newCard);
+            }
         }
 
         if (key == 's' || key == '-') {
@@ -289,10 +294,14 @@ function keyTyped() {
             cards.forEach(card => {
                 prevCards.push(card);
             });
-            cards.push(new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n - selectedCards[1].n));
+            newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n - selectedCards[1].n);
+            cards.push(newCard);
             cards.splice(cards.indexOf(selectedCards[0]), 1);
             cards.splice(cards.indexOf(selectedCards[1]), 1);
             selectedCards = [];
+            if(selectAfterOperation) {
+                selectedCards.push(newCard);
+            }
         }
 
         if (key == 'd' || key == '/') {
@@ -300,10 +309,14 @@ function keyTyped() {
             cards.forEach(card => {
                 prevCards.push(card);
             });
-            cards.push(new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n / selectedCards[1].n));
+            newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n / selectedCards[1].n);
+            cards.push(newCard);
             cards.splice(cards.indexOf(selectedCards[0]), 1);
             cards.splice(cards.indexOf(selectedCards[1]), 1);
             selectedCards = [];
+            if(selectAfterOperation) {
+                selectedCards.push(newCard);
+            }
         }
 
         if (key == 'm' || key == '*') {
@@ -311,10 +324,14 @@ function keyTyped() {
             cards.forEach(card => {
                 prevCards.push(card);
             });
-            cards.push(new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n * selectedCards[1].n));
+            newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n * selectedCards[1].n);
+            cards.push(newCard);
             cards.splice(cards.indexOf(selectedCards[0]), 1);
             cards.splice(cards.indexOf(selectedCards[1]), 1);
             selectedCards = [];
+            if(selectAfterOperation) {
+                selectedCards.push(newCard);
+            }
         }
 
         if (cards.length == 1) {

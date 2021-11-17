@@ -19,6 +19,8 @@ function SlidingButton(x, y, w, id) {
         case "facenumbers":
             this.toggle = faceNumbers;
             break;
+        case "autoselect":
+            this.toggle = selectAfterOperation;
     }
 
     this.show = function () {
@@ -36,6 +38,9 @@ function SlidingButton(x, y, w, id) {
                 break;
             case "facenumbers":
                 tx = "Face card numbers";
+                break;
+            case "autoselect":
+                tx = "Select card after operation";
                 break;
         }
 
@@ -77,6 +82,9 @@ function SlidingButton(x, y, w, id) {
                 break;
             case "facenumbers":
                 faceNumbers = this.toggle;
+                break;
+            case "autoselect":
+                selectAfterOperation = this.toggle;
                 break;
         }
     }
