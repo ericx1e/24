@@ -188,7 +188,7 @@ function draw() {
 
         text("welcome to 24 the game!", width/2, height/2-height*9.5/22);
         textSize(width/50);
-        text("\n\n\nthe objective of the game is to use all the cards to create 24\nyou must use all four cards and only be left with the 24 card\nclick on cards to select them\nonce you have two cards selected, choose an operation to combine them\naddition ('a','+','left')\tmultiplication ('m','*','right')\nsubtraction ('s','-','up')\tdivision ('d','/','down')\nundo ('u')\treset ('r')\tnext ('n')\n\n\n(click anywhere to close)", width/2, height/2-height*9.5/22);
+        text("\n\n\nthe objective of the game is to use all the cards to create 24\nyou must use all four cards and only be left with the 24 card\nclick on cards or use ('1', '2', '3', '4') keys to select them\nonce you have two cards selected, choose an operation to combine them\naddition ('a','+','left')\tmultiplication ('m','*','right')\nsubtraction ('s','-','up')\tdivision ('d','/','down')\nundo ('u')\treset ('r')\tnext ('n')\n\n\n(click anywhere to close)", width/2, height/2-height*9.5/22);
         
 
         textFont('Helvetica');
@@ -339,6 +339,17 @@ function keyTyped() {
 
     if (selectedCards.length == 2) {
         let i = Math.min(selectedCards[0].i, selectedCards[1].i);
+        let flag = true;
+        if(i == 3) {
+            for(let j = 0; j < cards.length; j++) {
+                if(cards[j].i == 2) {
+                    flag = false;
+                }
+            }
+            if(flag) {
+                i = 2;
+            }
+        }
         // let i = 1;
         // while(true) {
         //     let flag = true;
