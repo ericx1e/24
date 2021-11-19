@@ -16,13 +16,14 @@ let menuW;
 let menuH;
 let canvas;
 let menuSlidingButton = [];
-let menuButtonIds = ["randomloc", "allpossible", "confetti", "facenumbers", "autoselect"];
+let menuButtonIds = ["randomloc", "allpossible", "confetti", "facenumbers", "autoselect", "absolutevalue"];
 let spawnRandomLocation = true;
 let allPossible = true;
 let isConfetti = true;
 let faceNumbers = true;
 let selectAfterOperation = false;
 let isTutorial = true;
+let absoluteValue = false;
 let ericLink;
 
 let confettiColor;
@@ -55,16 +56,16 @@ function windowResized() {
 
 function initialize() {
     buttonPanelH = (width + 0.25 * height) / 15;
-    if (ericLink != null) {
+    if(ericLink!=null) {
         ericLink.remove();
     }
     ericLink = createA('https://github.com/ericx1e', 'made by Eric Xie', '_blank');
-    ericLink.style('font-size', width / 50 + 'px');
+    ericLink.style('font-size', width/50 + 'px');
     ericLink.style('color', '#ff0000');
-    ericLink.position(width / 2 - 6.5 * width / 100, height / 2 + height * 9.5 / 25);
+    ericLink.position(width/2 - 6.5*width/100, height/2 + height*9.5/25 );
     ericLink.hide();
 
-    menuW = (2 * width + 2 * height) / 10;
+    menuW = (2 * width +  2 * height) / 10;
     menuX = width;
     menuY = buttonPanelH;
     menuH = height - buttonPanelH;
@@ -73,7 +74,7 @@ function initialize() {
     for (let i = 0; i < buttonIds.length; i++) {
         buttons.push(new Button(width - buttonPanelH * (buttonIds.length - 0.5) + buttonPanelH * i, buttonPanelH / 2, buttonPanelH * 4 / 5, buttonIds[i]));
     }
-    buttons.push(new Button(buttonPanelH / 2, height - buttonPanelH / 2, buttonPanelH / 2, "?"));
+    buttons.push(new Button(buttonPanelH / 2, height -  buttonPanelH / 2, buttonPanelH/2, "?"));
 
 
     menuSlidingButton = [];
@@ -90,7 +91,7 @@ function initialize() {
     // }
 
     for (let i = 0; i < cards.length; i++) {
-        cards[i] = new Card(Math.min(cards[i].x, width - cards[i].w), Math.min(cards[i].y, height - cards[i].h), cards[i].n);
+        cards[i] = new Card(Math.min(cards[i].x, width-cards[i].w), Math.min(cards[i].y, height - cards[i].h), cards[i].n);
     }
 
     // newBoard();
@@ -174,21 +175,21 @@ function draw() {
     if (confetti.length < 75 && confetti.length > 0) {
         newBoard();
     }
-    if (isTutorial) {
+    if(isTutorial) {
         ericLink.show();
         rectMode(CENTER);
         noStroke();
         fill(0, 200);
-        rect(width / 2, height / 2, width * 9.5 / 10, height * 9.5 / 10, width * 9 / 200);
+        rect(width/2, height/2, width*9.5/10, height*9.5/10, width*9/200);
         fill(255);
         textAlign(CENTER, TOP);
-        textSize(width / 20);
+        textSize(width/20);
         textFont("Monospace");
 
-        text("welcome to 24 the game!", width / 2, height / 2 - height * 9.5 / 22);
-        textSize(width / 50);
-        text("\n\n\nthe objective of the game is to use all the cards to create 24\nyou must use all four cards and only be left with the 24 card\nclick on cards to select them\nonce you have two cards selected, choose an operation to combine them\naddition ('a','+')\tmultiplication ('m','*')\ndivision ('d','/')\tsubtraction ('s','-')\nundo ('u')\treset ('r')\tnext ('n')\n\n\n(click anywhere to close)", width / 2, height / 2 - height * 9.5 / 22);
-
+        text("welcome to 24 the game!", width/2, height/2-height*9.5/22);
+        textSize(width/50);
+        text("\n\n\nthe objective of the game is to use all the cards to create 24\nyou must use all four cards and only be left with the 24 card\nclick on cards to select them\nonce you have two cards selected, choose an operation to combine them\naddition ('a','+','left')\tmultiplication ('m','*','right')\nsubtraction ('s','-','up')\tdivision ('d','/','down')\nundo ('u')\treset ('r')\tnext ('n')\n\n\n(click anywhere to close)", width/2, height/2-height*9.5/22);
+        
 
         textFont('Helvetica');
     } else {
@@ -211,7 +212,7 @@ function draw() {
 let wut = false;
 
 function touchStarted() {
-    if (isTutorial) {
+    if(isTutorial) {
         return;
     }
     buttons.forEach(button => {
@@ -254,7 +255,7 @@ function touchStarted() {
 }
 
 function touchEnded() {
-    if (isTutorial && !wut) {
+    if(isTutorial && !wut) {
         isTutorial = false;
         return;
     }
@@ -262,24 +263,103 @@ function touchEnded() {
     return false;
 }
 
+let leftPressed = false;
+let upPressed = false;
+let rightPressed = false;
+let downPressed = false;
+
+function keyPressed() {
+    if(keyCode === LEFT_ARROW) {
+        leftPressed = true;
+        keyTyped();
+    }
+    if(keyCode === UP_ARROW) {
+        upPressed = true;
+        keyTyped();
+    }
+    if(keyCode === RIGHT_ARROW) {
+        rightPressed = true;
+        keyTyped();
+    }
+    if(keyCode === DOWN_ARROW) {
+        downPressed = true;
+        keyTyped();
+    }
+}
+
+function keyReleased() {
+    if(keyCode === LEFT_ARROW) {
+        leftPressed = false;
+    }
+    if(keyCode === UP_ARROW) {
+        upPressed = false;
+    }
+    if(keyCode === RIGHT_ARROW) {
+        rightPressed = false;
+    }
+    if(keyCode === DOWN_ARROW) {
+        downPressed = false;
+    }
+}
+
+
 function keyTyped() {
-    if (isTutorial) {
+    console.log("hello");
+    if(isTutorial) {
         return;
     }
     if (key == ' ') {
     }
 
-    if (key == 'n') {
+    if (key == 'n' || key == 'N') {
         newBoard();
+    }
+    if(key == '1' || key == '2' || key == '3' || key == '4') {
+        let flag = false;
+        for (let i = cards.length - 1; i >= 0; i--) {
+            let card = cards[i];
+            if(!flag && card.i == parseInt(key)) {
+                flag = true;
+                // card.selected = !card.selected;
+                cards.splice(i, 1);
+                cards.push(card);
+                if (selectedCards.includes(card)) {
+                    selectedCards.splice(selectedCards.indexOf(card), 1);
+                } else {
+                    selectedCards.push(card);
+                    if (selectedCards.length > 2) {
+                        selectedCards.splice(0, 1);
+                    }
+    
+                }
+            }
+        }
+    
     }
 
     if (selectedCards.length == 2) {
-        if (key == 'a' || key == 'A' || key == '+') {
+        let i = Math.min(selectedCards[0].i, selectedCards[1].i);
+        // let i = 1;
+        // while(true) {
+        //     let flag = true;
+        //     for(let j = 0; j < cards.length; j++) {
+        //         if(cards[j].i == i) {
+        //             flag = false;
+        //             break;
+        //         }
+        //     }
+        //     if(flag) {
+        //         break;
+        //     }
+        //     i++;
+        // }
+
+        if (key == 'a' || key == '+' || key == 'A' || leftPressed) {
             prevCards = [];
             cards.forEach(card => {
                 prevCards.push(card);
             });
-            newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n + selectedCards[1].n);
+            newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n + selectedCards[1].n, i);
             cards.push(newCard);
             cards.splice(cards.indexOf(selectedCards[0]), 1);
             cards.splice(cards.indexOf(selectedCards[1]), 1);
@@ -289,12 +369,16 @@ function keyTyped() {
             }
         }
 
-        if (key == 's' || key == 'S' || key == '-') {
+        if (key == 's' || key == '-' || key == 'S' || upPressed) {
             prevCards = [];
             cards.forEach(card => {
                 prevCards.push(card);
             });
-            newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n - selectedCards[1].n);
+            if(absoluteValue) {
+                newCard = new Card(selectedCards[1].x, selectedCards[1].y, Math.abs(selectedCards[0].n - selectedCards[1].n), i);
+            } else { 
+                newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n - selectedCards[1].n, i);
+            }
             cards.push(newCard);
             cards.splice(cards.indexOf(selectedCards[0]), 1);
             cards.splice(cards.indexOf(selectedCards[1]), 1);
@@ -304,12 +388,20 @@ function keyTyped() {
             }
         }
 
-        if (key == 'd' || key == 'D' || key == '/') {
+        if (key == 'd' || key == '/' || key == 'D' || downPressed) {
             prevCards = [];
             cards.forEach(card => {
                 prevCards.push(card);
             });
-            newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n / selectedCards[1].n);
+            if(absoluteValue) {
+                if(selectedCards[0].n >= selectedCards[1].n) {
+                    newCard = new Card(selectedCards[1].x, selectedCards[1].y, Math.abs(selectedCards[0].n / selectedCards[1].n), i);
+                } else {
+                    newCard = new Card(selectedCards[1].x, selectedCards[1].y, Math.abs(selectedCards[1].n / selectedCards[0].n), i);
+                }
+            } else { 
+                newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n / selectedCards[1].n, i);
+            }
             cards.push(newCard);
             cards.splice(cards.indexOf(selectedCards[0]), 1);
             cards.splice(cards.indexOf(selectedCards[1]), 1);
@@ -319,12 +411,12 @@ function keyTyped() {
             }
         }
 
-        if (key == 'm' || key == 'M' || key == '*') {
+        if (key == 'm' || key == '*' || key == 'M' || rightPressed) {
             prevCards = [];
             cards.forEach(card => {
                 prevCards.push(card);
             });
-            newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n * selectedCards[1].n);
+            newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n * selectedCards[1].n, i);
             cards.push(newCard);
             cards.splice(cards.indexOf(selectedCards[0]), 1);
             cards.splice(cards.indexOf(selectedCards[1]), 1);
@@ -393,7 +485,7 @@ function newBoard() {
                 randX = random(0, width - w);
                 randY = random(buttonPanelH, height - h);
             }
-            cards.push(new Card(randX, randY, Math.floor(random(1, 14))));
+            cards.push(new Card(randX, randY, Math.floor(random(1, 14)), i+1));
         }
         // cards = [new Card(100, 100, 1),new Card(200, 100, 3),new Card(300, 100, 4),new Card(400, 100, 6)];
 
@@ -409,7 +501,7 @@ function newBoard() {
                         randX = random(0, width - w);
                         randY = random(buttonPanelH, height - h);
                     }
-                    cards.push(new Card(randX, randY, Math.floor(random(1, 14))));
+                    cards.push(new Card(randX, randY, Math.floor(random(1, 14)), i+1));
                 }
             }
         }
@@ -417,7 +509,7 @@ function newBoard() {
         for (let i = 0; i < 4; i++) {
             let h = (width + height) / 10;
             let w = h / 7 * 5;
-            cards.push(new Card(width / 8 * i + width / 4 + (width / 8 - w) / 2, height / 2 + buttonPanelH / 2 - h / 2, Math.floor(random(1, 14))));
+            cards.push(new Card(width / 8 * i + width / 4 + (width / 8 - w) / 2, height / 2 + buttonPanelH / 2 - h / 2, Math.floor(random(1, 14)), i+1));
         }
         if (allPossible) {
             while (checkPossible() == 0) {
@@ -425,7 +517,7 @@ function newBoard() {
                 for (let i = 0; i < 4; i++) {
                     let h = (width + height) / 10;
                     let w = h / 7 * 5;
-                    cards.push(new Card(width / 8 * i + width / 4 + (width / 8 - w) / 2, height / 2 + buttonPanelH / 2 - h / 2, Math.floor(random(1, 14))));
+                    cards.push(new Card(width / 8 * i + width / 4 + (width / 8 - w) / 2, height / 2 + buttonPanelH / 2 - h / 2, Math.floor(random(1, 14)), i+1));
                 }
             }
         }

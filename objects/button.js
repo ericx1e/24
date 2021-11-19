@@ -112,13 +112,14 @@ function Button(x, y, s, id) {
     this.update = function () {
         if (this.touchingMouse()) {
             if (selectedCards.length == 2) {
+                let i = Math.min(selectedCards[0].i, selectedCards[1].i);
                 switch (this.id) {
                     case "add":
                         prevCards = [];
                         cards.forEach(card => {
                             prevCards.push(card);
                         });
-                        newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n + selectedCards[1].n);
+                        newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n + selectedCards[1].n, i);
                         cards.push(newCard);
                         cards.splice(cards.indexOf(selectedCards[0]), 1);
                         cards.splice(cards.indexOf(selectedCards[1]), 1);
@@ -132,7 +133,11 @@ function Button(x, y, s, id) {
                         cards.forEach(card => {
                             prevCards.push(card);
                         });
-                        newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n - selectedCards[1].n);
+                        if(absoluteValue) {
+                            newCard = new Card(selectedCards[1].x, selectedCards[1].y, Math.abs(selectedCards[0].n - selectedCards[1].n), i);
+                        } else { 
+                            newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n - selectedCards[1].n, i);
+                        }
                         cards.push(newCard);
                         cards.splice(cards.indexOf(selectedCards[0]), 1);
                         cards.splice(cards.indexOf(selectedCards[1]), 1);
@@ -146,7 +151,7 @@ function Button(x, y, s, id) {
                         cards.forEach(card => {
                             prevCards.push(card);
                         });
-                        newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n * selectedCards[1].n);
+                        newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n * selectedCards[1].n, i);
                         cards.push(newCard);
                         cards.splice(cards.indexOf(selectedCards[0]), 1);
                         cards.splice(cards.indexOf(selectedCards[1]), 1);
@@ -160,7 +165,15 @@ function Button(x, y, s, id) {
                         cards.forEach(card => {
                             prevCards.push(card);
                         });
-                        newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n / selectedCards[1].n);
+                        if(absoluteValue) {
+                            if(selectedCards[0].n >= selectedCards[1].n) {
+                                newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n / selectedCards[1].n, i);
+                            } else {
+                                newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[1].n / selectedCards[0].n, i);
+                            }
+                        } else { 
+                            newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n / selectedCards[1].n, i);
+                        }
                         cards.push(newCard);
                         cards.splice(cards.indexOf(selectedCards[0]), 1);
                         cards.splice(cards.indexOf(selectedCards[1]), 1);

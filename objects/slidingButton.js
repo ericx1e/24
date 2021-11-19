@@ -21,6 +21,10 @@ function SlidingButton(x, y, w, id) {
             break;
         case "autoselect":
             this.toggle = selectAfterOperation;
+            break;
+        case "absolutevalue":
+            this.toggle = absoluteValue;
+            break;
     }
 
     this.show = function () {
@@ -41,6 +45,9 @@ function SlidingButton(x, y, w, id) {
                 break;
             case "autoselect":
                 tx = "Select card after operation";
+                break;
+            case "absolutevalue":
+                tx = "Absolute value (sub/div)";
                 break;
         }
 
@@ -86,6 +93,8 @@ function SlidingButton(x, y, w, id) {
             case "autoselect":
                 selectAfterOperation = this.toggle;
                 break;
+            case "absolutevalue":
+                absoluteValue = this.toggle;
         }
     }
 

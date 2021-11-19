@@ -1,4 +1,4 @@
-function Card(x, y, n) {
+function Card(x, y, n, i) {
     this.x = x;
     this.y = y;
     this.h = (width + height) / 10;
@@ -6,6 +6,7 @@ function Card(x, y, n) {
     // this.w = 125;
     // this.h = 175;
     this.n = n;
+    this.i = i;
     this.lifted = false;
     this.selected = false;
 
@@ -57,6 +58,11 @@ function Card(x, y, n) {
             textAlign(CENTER, CENTER)
             text(tx, this.x + 5 + this.w / 2, this.y - 3 + this.h / 2);
 
+            noStroke();
+            fill(200);
+            textSize(this.w / 5);
+            text(i, this.x + 4 * this.w / 5 + 5, this.y + this.w / 5 - 3);
+
             if (this.selected) {
                 noStroke();
                 fill(255, 50, 50);
@@ -98,6 +104,11 @@ function Card(x, y, n) {
                 noStroke();
                 text(tx, this.x + this.w / 2, this.y + this.h / 2);
             }
+
+            noStroke();
+            fill(200);
+            textSize(this.w / 5);
+            text(i, this.x + 4 * this.w / 5, this.y + this.w / 5);
 
             if (this.selected) {
                 noStroke();
