@@ -129,10 +129,10 @@ function Card(x, y, n, i) {
             this.y += mouseY - pmouseY;
         }
 
-        // this.x = Math.max(this.x, 0);
-        // this.x = Math.min(this.x, width - this.w);
-        // this.y = Math.max(this.y, 0);
-        // this.y = Math.min(this.y, height - this.h);
+        this.x = Math.max(this.x, 0);
+        this.x = Math.min(this.x, width - this.w);
+        this.y = Math.max(this.y, buttonPanelH);
+        this.y = Math.min(this.y, height - this.h);
 
         this.lifted = mouseIsPressed && this.touchingMouse();
 

@@ -91,7 +91,7 @@ function initialize() {
     // }
 
     for (let i = 0; i < cards.length; i++) {
-        cards[i] = new Card(Math.min(cards[i].x, width-cards[i].w), Math.min(cards[i].y, height - cards[i].h), cards[i].n);
+        cards[i] = new Card(Math.min(cards[i].x, width-cards[i].w), Math.min(cards[i].y, height - cards[i].h), cards[i].n, cards[i].i);
     }
 
     // newBoard();
@@ -246,7 +246,6 @@ function touchStarted() {
                 if (selectedCards.length > 2) {
                     selectedCards.splice(0, 1);
                 }
-
             }
         }
     }
