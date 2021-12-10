@@ -102,6 +102,21 @@ function Button(x, y, s, id) {
                 textAlign(CENTER, CENTER);
                 text("?", this.x, this.y);
                 break;
+            
+            case "help":
+                noFill();
+                stroke(0);
+                strokeWeight(5);
+                arc(this.x, this.y, this.w/2, this.w/2, PI - QUARTER_PI * 1.4, QUARTER_PI * 1.4, OPEN);
+                line(this.x + 40 * cos(PI - QUARTER_PI * 1.4), this.y + 40 * sin(PI - QUARTER_PI * 1.4), this.x + 40 * cos(PI - QUARTER_PI * 1.4), this.y + 40 * sin(PI - QUARTER_PI * 1.4) + 20);
+                line(this.x + 40 * (cos(QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)), this.x + 40 * (cos(QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)) + 20);
+                for(let i = 0; i < 3; i++) {
+                    line(this.x + 40 * (cos(QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * i, this.x + 40 * (cos(PI-QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)) + 20 + 10 * i);
+                }
+                line(this.x - 15 * (cos(QUARTER_PI * 1.4)), this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 3, this.x + 40 * (cos(PI-QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)) + 20 + 10 * 3);
+                line(this.x + 40 * (cos(PI-QUARTER_PI * 1.4)), this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 3, this.x + 40 * (cos(QUARTER_PI * 1.4)), this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 3);
+                line(this.x + 40 * (cos(PI-QUARTER_PI * 1.4)) + 5, this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 4, this.x + 40 * (cos(QUARTER_PI * 1.4)) - 5, this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 4);
+                break;
         }
     }
 
@@ -111,6 +126,7 @@ function Button(x, y, s, id) {
 
     this.update = function () {
         if (this.touchingMouse()) {
+            buttonSound.play();
             if (selectedCards.length == 2) {
                 let i = Math.min(selectedCards[0].i, selectedCards[1].i);
                 switch (this.id) {
@@ -217,6 +233,8 @@ function Button(x, y, s, id) {
                     isTutorial = true;
                     wut = true;
                     // tutorial();
+                    break;
+                case "help":
                     break;
             }
         }

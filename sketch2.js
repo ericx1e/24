@@ -29,6 +29,21 @@ let ericLink;
 let confettiColor;
 let confetti = [];
 
+let dealSound;
+let cardSounds = [];
+let partySound;
+let buttonSound;
+
+function preload() {
+    dealSound = loadSound('sounds/carddeal.mp3');
+    partySound = loadSound('sounds/partyhorn.mp3');
+    for(let i = 1; i <= 3; i++) {
+        console.log('sounds/cardsound'+i+'.mp3');
+        cardSounds.push(loadSound('sounds/cardsound'+i+'.mp3'));
+    }
+    buttonSound = loadSound('sounds/buttonsound.mp3');
+}
+
 function setup() {
     canvas = createCanvas(window.innerWidth, window.innerHeight);
     canvas.position(0, 0);
@@ -75,6 +90,7 @@ function initialize() {
         buttons.push(new Button(width - buttonPanelH * (buttonIds.length - 0.5) + buttonPanelH * i, buttonPanelH / 2, buttonPanelH * 4 / 5, buttonIds[i]));
     }
     buttons.push(new Button(buttonPanelH / 2, height -  buttonPanelH / 2, buttonPanelH/2, "?"));
+    // buttons.push(new Button(buttonPanelH, height -  buttonPanelH / 2, buttonPanelH/2, "help"));
 
 
     menuSlidingButton = [];
@@ -239,6 +255,7 @@ function touchStarted() {
             // card.selected = !card.selected;
             cards.splice(i, 1);
             cards.push(card);
+            // playCardSound();
             if (selectedCards.includes(card)) {
                 selectedCards.splice(selectedCards.indexOf(card), 1);
             } else {
@@ -259,6 +276,19 @@ function touchEnded() {
         return;
     }
     wut = false;
+
+    let flag = false;
+    for (let i = cards.length - 1; i >= 0; i--) {
+        let card = cards[i];
+        if (!flag && card.touchingMouse()) {
+            flag = true;
+            // card.selected = !card.selected;
+            cards.splice(i, 1);
+            cards.push(card);
+            playCardSound();
+        }
+    }
+
     return false;
 }
 
@@ -303,7 +333,6 @@ function keyReleased() {
 
 
 function keyTyped() {
-    console.log("hello");
     if(isTutorial) {
         return;
     }
@@ -322,6 +351,7 @@ function keyTyped() {
                 // card.selected = !card.selected;
                 cards.splice(i, 1);
                 cards.push(card);
+                playCardSound();
                 if (selectedCards.includes(card)) {
                     selectedCards.splice(selectedCards.indexOf(card), 1);
                 } else {
@@ -365,6 +395,7 @@ function keyTyped() {
         // }
 
         if (key == 'a' || key == '+' || key == 'A' || leftPressed) {
+            buttonSound.play();
             prevCards = [];
             cards.forEach(card => {
                 prevCards.push(card);
@@ -380,6 +411,7 @@ function keyTyped() {
         }
 
         if (key == 's' || key == '-' || key == 'S' || upPressed) {
+            buttonSound.play();
             prevCards = [];
             cards.forEach(card => {
                 prevCards.push(card);
@@ -399,6 +431,7 @@ function keyTyped() {
         }
 
         if (key == 'd' || key == '/' || key == 'D' || downPressed) {
+            buttonSound.play();
             prevCards = [];
             cards.forEach(card => {
                 prevCards.push(card);
@@ -422,6 +455,7 @@ function keyTyped() {
         }
 
         if (key == 'm' || key == '*' || key == 'M' || rightPressed) {
+            buttonSound.play();
             prevCards = [];
             cards.forEach(card => {
                 prevCards.push(card);
@@ -446,6 +480,7 @@ function keyTyped() {
     }
 
     if (key == 'u' || key == 'U') {
+        buttonSound.play();
         cards = [];
         selectedCards = [];
         prevCards.forEach(card => {
@@ -454,6 +489,7 @@ function keyTyped() {
     }
 
     if (key == 'r' || key == 'R') {
+        buttonSound.play();
         cards = [];
         selectedCards = [];
         intialCards.forEach(card => {
@@ -461,13 +497,13 @@ function keyTyped() {
         });
     }
 
-    if (key == 'p' || key == 'P') {
-        cards = [];
-        selectedCards = [];
-        prevBoard.forEach(card => {
-            cards.push(card);
-        });
-    }
+    // if (key == 'p' || key == 'P') {
+    //     cards = [];
+    //     selectedCards = [];
+    //     prevBoard.forEach(card => {
+    //         cards.push(card);
+    //     });
+    // }
 
 }
 
@@ -475,7 +511,12 @@ function touchMoved() {
     return false;
 }
 
+function playCardSound() {
+    cardSounds[Math.floor(random(0, cardSounds.length))].play();
+}
+
 function newBoard() {
+    dealSound.play();
     confetti = [];
     prevBoard = [];
 
@@ -497,7 +538,7 @@ function newBoard() {
             }
             cards.push(new Card(randX, randY, Math.floor(random(1, 14)), i+1));
         }
-        // cards = [new Card(100, 100, 1),new Card(200, 100, 3),new Card(300, 100, 4),new Card(400, 100, 6)];
+        // cards = [new Card(100, 100, 8),new Card(200, 100, 3),new Card(300, 100, 4),new Card(400, 100, 7)];
 
         if (allPossible) {
             while (checkPossible() == 0) {
@@ -581,6 +622,7 @@ function locationTaken(x, y) {
 }
 
 function scorePoint() {
+    partySound.play();
     score++;
     if (isConfetti) {
         for (let i = 0; i < 150; i++) {
