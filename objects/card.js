@@ -34,7 +34,7 @@ function Card(x, y, n, i) {
         rectMode(CORNER);
 
         this.selected = selectedCards.includes(this);
-        if (n == 24 && cards.length == 1) {
+        if (cards[0].n > 23.9999 && cards[0].n < 24.0001 && cards.length == 1) {
             this.selected = false;
             this.lifted = false;
         }
@@ -77,7 +77,7 @@ function Card(x, y, n, i) {
                 strokeWeight(2);
                 stroke(17);
             }
-            if (n == 24 && cards.length == 1) {
+            if (cards[0].n > 23.9999 && cards[0].n < 24.0001 && cards.length == 1) {
                 for (let i = 0; i < 20; i++) {
                     stroke(255, 255, 0, 20);
                     strokeWeight(20 - i);
@@ -92,7 +92,7 @@ function Card(x, y, n, i) {
             rect(this.x, this.y, this.w, this.h, this.w / 5);
             textAlign(CENTER, CENTER);
             textSize(this.w / 2);
-            if (n == 24 && cards.length == 1) {
+            if (cards[0].n > 23.9999 && cards[0].n < 24.0001 && cards.length == 1) {
                 for (let i = 0; i < 10; i++) {
                     stroke(255, 255, 0, 15);
                     strokeWeight(10 - i);
@@ -121,7 +121,7 @@ function Card(x, y, n, i) {
     }
 
     this.update = function () {
-        if(isTutorial) {
+        if (isTutorial) {
             return;
         }
         if (this.lifted) {
