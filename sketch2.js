@@ -538,7 +538,7 @@ function newBoard() {
             }
             cards.push(new Card(randX, randY, Math.floor(random(1, 14)), i + 1));
         }
-        cards = [new Card(100, 100, 8, 1), new Card(200, 100, 6, 2), new Card(300, 100, 2, 3), new Card(400, 100, 10, 4)];
+        // cards = [new Card(100, 100, 8, 1), new Card(200, 100, 6, 2), new Card(300, 100, 2, 3), new Card(400, 100, 10, 4)];
 
         if (allPossible) {
             while (checkPossible() == 0) {
