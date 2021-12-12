@@ -342,6 +342,9 @@ function keyTyped() {
     if (key == 'n' || key == 'N') {
         newBoard();
     }
+    if (cards.length == 1 && cards[0].n > 23.9999 && cards[0].n < 24.0001) {
+        return;
+    }
     if (key == '1' || key == '2' || key == '3' || key == '4') {
         let flag = false;
         for (let i = cards.length - 1; i >= 0; i--) {

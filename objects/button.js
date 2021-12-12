@@ -40,7 +40,7 @@ function Button(x, y, s, id) {
 
         noStroke();
 
-        if(this.id == "?") {
+        if (this.id == "?") {
             ellipse(this.x, this.y, this.w);
         } else {
             rect(this.x, this.y, this.w, this.h, this.w / 3);
@@ -96,26 +96,26 @@ function Button(x, y, s, id) {
                 line(this.x - this.w / 4, this.y + this.h / 6, this.x + this.w / 4, this.y + this.h / 6);
                 break;
             case "?":
-                textSize(this.w/1.5);
+                textSize(this.w / 1.5);
                 fill(230);
                 noStroke();
                 textAlign(CENTER, CENTER);
                 text("?", this.x, this.y);
                 break;
-            
+
             case "help":
                 noFill();
                 stroke(0);
                 strokeWeight(5);
-                arc(this.x, this.y, this.w/2, this.w/2, PI - QUARTER_PI * 1.4, QUARTER_PI * 1.4, OPEN);
+                arc(this.x, this.y, this.w / 2, this.w / 2, PI - QUARTER_PI * 1.4, QUARTER_PI * 1.4, OPEN);
                 line(this.x + 40 * cos(PI - QUARTER_PI * 1.4), this.y + 40 * sin(PI - QUARTER_PI * 1.4), this.x + 40 * cos(PI - QUARTER_PI * 1.4), this.y + 40 * sin(PI - QUARTER_PI * 1.4) + 20);
                 line(this.x + 40 * (cos(QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)), this.x + 40 * (cos(QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)) + 20);
-                for(let i = 0; i < 3; i++) {
-                    line(this.x + 40 * (cos(QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * i, this.x + 40 * (cos(PI-QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)) + 20 + 10 * i);
+                for (let i = 0; i < 3; i++) {
+                    line(this.x + 40 * (cos(QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * i, this.x + 40 * (cos(PI - QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)) + 20 + 10 * i);
                 }
-                line(this.x - 15 * (cos(QUARTER_PI * 1.4)), this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 3, this.x + 40 * (cos(PI-QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)) + 20 + 10 * 3);
-                line(this.x + 40 * (cos(PI-QUARTER_PI * 1.4)), this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 3, this.x + 40 * (cos(QUARTER_PI * 1.4)), this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 3);
-                line(this.x + 40 * (cos(PI-QUARTER_PI * 1.4)) + 5, this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 4, this.x + 40 * (cos(QUARTER_PI * 1.4)) - 5, this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 4);
+                line(this.x - 15 * (cos(QUARTER_PI * 1.4)), this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 3, this.x + 40 * (cos(PI - QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)) + 20 + 10 * 3);
+                line(this.x + 40 * (cos(PI - QUARTER_PI * 1.4)), this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 3, this.x + 40 * (cos(QUARTER_PI * 1.4)), this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 3);
+                line(this.x + 40 * (cos(PI - QUARTER_PI * 1.4)) + 5, this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 4, this.x + 40 * (cos(QUARTER_PI * 1.4)) - 5, this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 4);
                 break;
         }
     }
@@ -140,7 +140,7 @@ function Button(x, y, s, id) {
                         cards.splice(cards.indexOf(selectedCards[0]), 1);
                         cards.splice(cards.indexOf(selectedCards[1]), 1);
                         selectedCards = [];
-                        if(selectAfterOperation) {
+                        if (selectAfterOperation) {
                             selectedCards.push(newCard);
                         }
                         break;
@@ -149,16 +149,16 @@ function Button(x, y, s, id) {
                         cards.forEach(card => {
                             prevCards.push(card);
                         });
-                        if(absoluteValue) {
+                        if (absoluteValue) {
                             newCard = new Card(selectedCards[1].x, selectedCards[1].y, Math.abs(selectedCards[0].n - selectedCards[1].n), i);
-                        } else { 
+                        } else {
                             newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n - selectedCards[1].n, i);
                         }
                         cards.push(newCard);
                         cards.splice(cards.indexOf(selectedCards[0]), 1);
                         cards.splice(cards.indexOf(selectedCards[1]), 1);
                         selectedCards = [];
-                        if(selectAfterOperation) {
+                        if (selectAfterOperation) {
                             selectedCards.push(newCard);
                         }
                         break;
@@ -172,7 +172,7 @@ function Button(x, y, s, id) {
                         cards.splice(cards.indexOf(selectedCards[0]), 1);
                         cards.splice(cards.indexOf(selectedCards[1]), 1);
                         selectedCards = [];
-                        if(selectAfterOperation) {
+                        if (selectAfterOperation) {
                             selectedCards.push(newCard);
                         }
                         break;
@@ -181,20 +181,20 @@ function Button(x, y, s, id) {
                         cards.forEach(card => {
                             prevCards.push(card);
                         });
-                        if(absoluteValue) {
-                            if(selectedCards[0].n >= selectedCards[1].n) {
+                        if (absoluteValue) {
+                            if (selectedCards[0].n >= selectedCards[1].n) {
                                 newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n / selectedCards[1].n, i);
                             } else {
                                 newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[1].n / selectedCards[0].n, i);
                             }
-                        } else { 
+                        } else {
                             newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n / selectedCards[1].n, i);
                         }
                         cards.push(newCard);
                         cards.splice(cards.indexOf(selectedCards[0]), 1);
                         cards.splice(cards.indexOf(selectedCards[1]), 1);
                         selectedCards = [];
-                        if(selectAfterOperation) {
+                        if (selectAfterOperation) {
                             selectedCards.push(newCard);
                         }
                         break;
@@ -210,6 +210,9 @@ function Button(x, y, s, id) {
             }
             switch (this.id) {
                 case "undo":
+                    if (cards.length == 1 && cards[0].n > 23.9999 && cards[0].n < 24.0001) {
+                        break;
+                    }
                     cards = [];
                     selectedCards = [];
                     prevCards.forEach(card => {
@@ -217,6 +220,9 @@ function Button(x, y, s, id) {
                     });
                     break;
                 case "reset":
+                    if (cards.length == 1 && cards[0].n > 23.9999 && cards[0].n < 24.0001) {
+                        break;
+                    }
                     cards = [];
                     selectedCards = [];
                     intialCards.forEach(card => {
