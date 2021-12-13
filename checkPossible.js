@@ -1674,17 +1674,16 @@ function checkPossible() {
         }
     });
 
+    let allSolutions = [];
+
     for (let i = 0; i < workingP.length; i++) {
         // console.log(workingP[i], workingI[i], workingA[i], workingB[i], workingC[i]);
         // if (equationString(workingP[i], workingI[i], workingA[i], workingB[i], workingC[i]) == equationString(workingP[i + 1], workingI[i + 1], workingA[i + 1], workingB[i + 1], workingC[i + 1])) {
-        console.log(equationString(workingP[i], workingI[i], workingA[i], workingB[i], workingC[i]));
+        allSolutions.push(equationString(workingP[i], workingI[i], workingA[i], workingB[i], workingC[i]));
         // }
     }
-
-    if(works) {
-        return workingP.length;
-    }
-    return 0;
+    
+    return allSolutions;
 }
 
 function equationString(p, i, a, b, c) {

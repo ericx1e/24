@@ -36,11 +36,14 @@ function Button(x, y, s, id) {
             case "?":
                 fill(170);
                 break;
+            case "soln":
+                fill(170);
+                break;
         }
 
         noStroke();
 
-        if (this.id == "?") {
+        if (this.id == "?" || this.id == "soln") {
             ellipse(this.x, this.y, this.w);
         } else {
             rect(this.x, this.y, this.w, this.h, this.w / 3);
@@ -103,19 +106,30 @@ function Button(x, y, s, id) {
                 text("?", this.x, this.y);
                 break;
 
-            case "help":
-                noFill();
-                stroke(0);
-                strokeWeight(5);
-                arc(this.x, this.y, this.w / 2, this.w / 2, PI - QUARTER_PI * 1.4, QUARTER_PI * 1.4, OPEN);
-                line(this.x + 40 * cos(PI - QUARTER_PI * 1.4), this.y + 40 * sin(PI - QUARTER_PI * 1.4), this.x + 40 * cos(PI - QUARTER_PI * 1.4), this.y + 40 * sin(PI - QUARTER_PI * 1.4) + 20);
-                line(this.x + 40 * (cos(QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)), this.x + 40 * (cos(QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)) + 20);
-                for (let i = 0; i < 3; i++) {
-                    line(this.x + 40 * (cos(QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * i, this.x + 40 * (cos(PI - QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)) + 20 + 10 * i);
-                }
-                line(this.x - 15 * (cos(QUARTER_PI * 1.4)), this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 3, this.x + 40 * (cos(PI - QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)) + 20 + 10 * 3);
-                line(this.x + 40 * (cos(PI - QUARTER_PI * 1.4)), this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 3, this.x + 40 * (cos(QUARTER_PI * 1.4)), this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 3);
-                line(this.x + 40 * (cos(PI - QUARTER_PI * 1.4)) + 5, this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 4, this.x + 40 * (cos(QUARTER_PI * 1.4)) - 5, this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 4);
+            case "soln":
+                // noFill();
+                // stroke(0);
+                // strokeWeight(5);
+                // arc(this.x, this.y, this.w / 2, this.w / 2, PI - QUARTER_PI * 1.4, QUARTER_PI * 1.4, OPEN);
+                // line(this.x + 40 * cos(PI - QUARTER_PI * 1.4), this.y + 40 * sin(PI - QUARTER_PI * 1.4), this.x + 40 * cos(PI - QUARTER_PI * 1.4), this.y + 40 * sin(PI - QUARTER_PI * 1.4) + 20);
+                // line(this.x + 40 * (cos(QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)), this.x + 40 * (cos(QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)) + 20);
+                // for (let i = 0; i < 3; i++) {
+                //     line(this.x + 40 * (cos(QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * i, this.x + 40 * (cos(PI - QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)) + 20 + 10 * i);
+                // }
+                // line(this.x - 15 * (cos(QUARTER_PI * 1.4)), this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 3, this.x + 40 * (cos(PI - QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)) + 20 + 10 * 3);
+                // line(this.x + 40 * (cos(PI - QUARTER_PI * 1.4)), this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 3, this.x + 40 * (cos(QUARTER_PI * 1.4)), this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 3);
+                // line(this.x + 40 * (cos(PI - QUARTER_PI * 1.4)) + 5, this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 4, this.x + 40 * (cos(QUARTER_PI * 1.4)) - 5, this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 4);
+
+                fill(255);
+                noStroke();
+                rectMode(CENTER);
+                rect(this.x + this.w / 20, this.y, this.w * 3.5/6, this.h * 3.5/6, this.w/10);
+                fill(170);
+                ellipse(this.x + this.w / 20 + this.w * 3.5/15, this.y, this.w/5);
+                fill(255);
+                ellipse(this.x+ this.w / 20 , this.y + this.h * 3.5/10, this.w/5);
+                ellipse(this.x+ this.w / 20 , this.y - this.h * 3.5/10, this.w/5);
+                ellipse(this.x + this.w / 20 - this.w * 3.5/10, this.y, this.w/5);
                 break;
         }
     }
@@ -240,7 +254,9 @@ function Button(x, y, s, id) {
                     wut = true;
                     // tutorial();
                     break;
-                case "help":
+                case "soln":
+                    showSolution = true;
+                    wut = true;
                     break;
             }
         }

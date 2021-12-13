@@ -22,8 +22,10 @@ let allPossible = true;
 let isConfetti = true;
 let faceNumbers = true;
 let selectAfterOperation = false;
-let isTutorial = true;
 let absoluteValue = false;
+let isTutorial = true;
+let showSolution = false;
+let solutions;
 let ericLink;
 
 let confettiColor;
@@ -90,7 +92,7 @@ function initialize() {
         buttons.push(new Button(width - buttonPanelH * (buttonIds.length - 0.5) + buttonPanelH * i, buttonPanelH / 2, buttonPanelH * 4 / 5, buttonIds[i]));
     }
     buttons.push(new Button(buttonPanelH / 2, height - buttonPanelH / 2, buttonPanelH / 2, "?"));
-    // buttons.push(new Button(buttonPanelH, height -  buttonPanelH / 2, buttonPanelH/2, "help"));
+    buttons.push(new Button(buttonPanelH * 5 / 4, height -  buttonPanelH / 2, buttonPanelH/2, "soln"));
 
 
     menuSlidingButton = [];
@@ -211,7 +213,36 @@ function draw() {
     } else {
         ericLink.hide();
     }
-    textFont();
+
+    if (showSolution) {
+        rectMode(CENTER);
+        noStroke();
+        fill(0, 200);
+        rect(width / 2, height / 2, width * 9.5 / 10, height * 9.5 / 10, width * 9 / 200);
+        fill(255);
+        textAlign(CENTER, TOP);
+        textSize(width / 20);
+        textFont("Monospace");
+        textSize((width / 52));
+        let done = false;
+        txt = "";
+        for (let i = 0; i < 5; i++) {
+            for (let j = 0; j < 10; j++) {
+                if(10 * i + j >= solutions.length) {
+                    done = true;
+                    break;
+                }
+                txt += solutions[10*i+j] + ' ';
+            }
+            if(done) {
+                break;
+            }
+        }
+        textWrap(WORD);
+        text("solutions\n\n" + txt + "\n\n\n(click anywhere to close)", width / 2, height / 2 - height * 9.5 / 22, width * 9.5 / 11);
+        textWrap(WORD);
+        textFont('Helvetica');
+    }
 
     noCursor();
     if (mouseIsPressed) {
@@ -228,7 +259,7 @@ function draw() {
 let wut = false;
 
 function touchStarted() {
-    if (isTutorial) {
+    if (isTutorial || showSolution) {
         return;
     }
     buttons.forEach(button => {
@@ -275,7 +306,11 @@ function touchEnded() {
         isTutorial = false;
         return;
     }
-    wut = false;
+    if(showSolution && !wut) {
+        showSolution = false;
+        return;
+    }
+    wut = false; //basically this makes the menu not close from the mouse release on the button
 
     let flag = false;
     for (let i = cards.length - 1; i >= 0; i--) {
@@ -544,7 +579,7 @@ function newBoard() {
         // cards = [new Card(100, 100, 8, 1), new Card(200, 100, 6, 2), new Card(300, 100, 2, 3), new Card(400, 100, 10, 4)];
 
         if (allPossible) {
-            while (checkPossible() == 0) {
+            while (checkPossible().length == 0) {
                 cards = [];
                 for (let i = 0; i < 4; i++) {
                     let h = (width + height) / 10;
@@ -566,7 +601,7 @@ function newBoard() {
             cards.push(new Card(width / 8 * i + width / 4 + (width / 8 - w) / 2, height / 2 + buttonPanelH / 2 - h / 2, Math.floor(random(1, 14)), i + 1));
         }
         if (allPossible) {
-            while (checkPossible() == 0) {
+            while (checkPossible().length == 0) {
                 cards = [];
                 for (let i = 0; i < 4; i++) {
                     let h = (width + height) / 10;
@@ -576,6 +611,9 @@ function newBoard() {
             }
         }
     }
+
+    solutions = checkPossible();
+    console.log(solutions);
 
     prevCards = [];
     cards.forEach(card => {
