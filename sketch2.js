@@ -77,9 +77,9 @@ function initialize() {
         ericLink.remove();
     }
     ericLink = createA('https://github.com/ericx1e', 'made by Eric Xie', '_blank');
-    ericLink.style('font-size', width / 50 + 'px');
+    ericLink.style('font-size', (height / 90 + width / 70) + 'px');
     ericLink.style('color', '#ff0000');
-    ericLink.position(width / 2 - 6.5 * width / 100, height / 2 + height * 9.5 / 25);
+    ericLink.position(width / 2 - 6.5 * (height / 90 + width / 70)/2, height / 2 + height * 9.5 / 25);
     ericLink.hide();
 
     menuW = (2 * width + 2 * height) / 10;
@@ -118,7 +118,6 @@ function initialize() {
 
 function draw() {
     background(51);
-    // ericLink.style('font', 'Helvetica')
 
     let flag = false;
     if (!menuOpen) {
@@ -201,12 +200,12 @@ function draw() {
         rect(width / 2, height / 2, width * 9.5 / 10, height * 9.5 / 10, width * 9 / 200);
         fill(255);
         textAlign(CENTER, TOP);
-        textSize(width / 20);
+        textSize(height / 80 + width / 30);
         textFont("Monospace");
-
-        text("welcome to 24 the game!", width / 2, height / 2 - height * 9.5 / 22);
-        textSize(width / 50);
-        text("\n\n\nthe objective of the game is to use all the cards to create 24\nyou must use all four cards and only be left with the 24 card\nclick on cards or use ('1', '2', '3', '4') keys to select them\nonce you have two cards selected, choose an operation to combine them\naddition ('a','+','left')\tmultiplication ('m','*','right')\nsubtraction ('s','-','up')\tdivision ('d','/','down')\nundo ('u')\treset ('r')\tnext ('n')\n\n\n(click anywhere to close)", width / 2, height / 2 - height * 9.5 / 22);
+        textWrap(WORD);
+        text("welcome to 24 the game!", width / 2, height / 2 - height * 9.5 / 22, width * 9.5 / 11);
+        textSize(height / 60 + width / 90);
+        text("\n\n\nthe objective of the game is to use all the cards to create 24\nyou must use all four cards and only be left with the 24 card\nclick on cards or use ('1', '2', '3', '4') keys to select them\nonce you have two cards selected, choose an operation to combine them\naddition-('a','+','left')\tmultiplication-('m','*','right')\nsubtraction-('s','-','up')\tdivision-('d','/','down')\nundo-('u')\treset-('r')\tnext-('n')\n\n\n(click anywhere to close)", width / 2, height / 2 - height * 9.5 / 22, width * 9.5 / 11);
 
 
         textFont('Helvetica');
@@ -223,7 +222,6 @@ function draw() {
         textAlign(CENTER, TOP);
         textSize(width / 20);
         textFont("Monospace");
-        textSize((width / 52));
         let done = false;
         txt = "";
         for (let i = 0; i < 5; i++) {
@@ -238,9 +236,8 @@ function draw() {
                 break;
             }
         }
-        textWrap(WORD);
+        textSize(height / 60 + width / 90);
         text("solutions\n\n" + txt + "\n\n\n(click anywhere to close)", width / 2, height / 2 - height * 9.5 / 22, width * 9.5 / 11);
-        textWrap(WORD);
         textFont('Helvetica');
     }
 
