@@ -30,6 +30,7 @@ function SlidingButton(x, y, w, id) {
     this.show = function () {
         let tx = "";
         textAlign(RIGHT, CENTER);
+        textFont('Helvetica');
         switch (id) {
             case "randomloc":
                 tx = "Random Card Locations";
@@ -64,7 +65,7 @@ function SlidingButton(x, y, w, id) {
 
         fill(255);
         textAlign(CENTER, CENTER);
-        textSize(this.h/3);
+        textSize(this.h / 3);
         text(this.toggle ? "ON" : "OFF", this.buttonX, this.y);
 
     }

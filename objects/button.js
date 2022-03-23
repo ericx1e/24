@@ -39,11 +39,17 @@ function Button(x, y, s, id) {
             case "soln":
                 fill(170);
                 break;
+            case "modes":
+                fill(170);
+                break;
+            case "enter":
+                fill(170);
+                break;
         }
 
         noStroke();
 
-        if (this.id == "?" || this.id == "soln") {
+        if (this.id == "?" || this.id == "soln" || this.id == "modes" || this.id == "enter") {
             ellipse(this.x, this.y, this.w);
         } else {
             rect(this.x, this.y, this.w, this.h, this.w / 3);
@@ -92,46 +98,85 @@ function Button(x, y, s, id) {
                 triangle(this.x + this.w / 4, this.y - this.w / 20, this.x + this.w / 4, this.y + this.w / 20, this.x + this.w / 4 + this.w / 15, this.y);
                 break;
             case "menu":
+                noStroke();
                 stroke(200);
-                // strokeWeight(this.w / 12);
-                line(this.x - this.w / 4, this.y - this.h / 6, this.x + this.w / 4, this.y - this.h / 6);
-                line(this.x - this.w / 4, this.y, this.x + this.w / 4, this.y);
-                line(this.x - this.w / 4, this.y + this.h / 6, this.x + this.w / 4, this.y + this.h / 6);
+                strokeWeight(this.w / 100);
+                fill(200);
+                textAlign(CENTER, CENTER);
+                textFont(icons);
+                textSize(this.w / 1.5);
+                text('\uf1de', this.x, this.y);
+                // line(this.x - this.w / 4, this.y - this.h / 6, this.x + this.w / 4, this.y - this.h / 6);
+                // line(this.x - this.w / 4, this.y, this.x + this.w / 4, this.y);
+                // line(this.x - this.w / 4, this.y + this.h / 6, this.x + this.w / 4, this.y + this.h / 6);
                 break;
             case "?":
                 textSize(this.w / 1.5);
                 fill(230);
                 noStroke();
+                textFont(icons);
                 textAlign(CENTER, CENTER);
-                text("?", this.x, this.y);
+                text('\uf129', this.x, this.y);
+                // text('?', this.x, this.y);
+                // if(this.touchingMouse()) {
+                //     fill(255);
+                //     text("show instructions", mouseX, mouseY);
+                // }
                 break;
 
             case "soln":
-                // noFill();
-                // stroke(0);
-                // strokeWeight(5);
-                // arc(this.x, this.y, this.w / 2, this.w / 2, PI - QUARTER_PI * 1.4, QUARTER_PI * 1.4, OPEN);
-                // line(this.x + 40 * cos(PI - QUARTER_PI * 1.4), this.y + 40 * sin(PI - QUARTER_PI * 1.4), this.x + 40 * cos(PI - QUARTER_PI * 1.4), this.y + 40 * sin(PI - QUARTER_PI * 1.4) + 20);
-                // line(this.x + 40 * (cos(QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)), this.x + 40 * (cos(QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)) + 20);
-                // for (let i = 0; i < 3; i++) {
-                //     line(this.x + 40 * (cos(QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * i, this.x + 40 * (cos(PI - QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)) + 20 + 10 * i);
-                // }
-                // line(this.x - 15 * (cos(QUARTER_PI * 1.4)), this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 3, this.x + 40 * (cos(PI - QUARTER_PI * 1.4)), this.y + 40 * (sin(QUARTER_PI * 1.4)) + 20 + 10 * 3);
-                // line(this.x + 40 * (cos(PI - QUARTER_PI * 1.4)), this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 3, this.x + 40 * (cos(QUARTER_PI * 1.4)), this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 3);
-                // line(this.x + 40 * (cos(PI - QUARTER_PI * 1.4)) + 5, this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 4, this.x + 40 * (cos(QUARTER_PI * 1.4)) - 5, this.y + 32.5 * (sin(QUARTER_PI * 1.4)) + 30 + 10 * 4);
 
-                fill(255);
+                // fill(255);
+                // noStroke();
+                // rectMode(CENTER);
+                // rect(this.x + this.w / 20, this.y, this.w * 3.5 / 6, this.h * 3.5 / 6, this.w / 10);
+                // fill(170);
+                // ellipse(this.x + this.w / 20 + this.w * 3.5 / 15, this.y, this.w / 5);
+                // fill(255);
+                // ellipse(this.x + this.w / 20, this.y + this.h * 3.5 / 10, this.w / 5);
+                // ellipse(this.x + this.w / 20, this.y - this.h * 3.5 / 10, this.w / 5);
+                // ellipse(this.x + this.w / 20 - this.w * 3.5 / 10, this.y, this.w / 5);
+
+                textSize(this.w / 1.5);
+                fill(230);
                 noStroke();
-                rectMode(CENTER);
-                rect(this.x + this.w / 20, this.y, this.w * 3.5/6, this.h * 3.5/6, this.w/10);
-                fill(170);
-                ellipse(this.x + this.w / 20 + this.w * 3.5/15, this.y, this.w/5);
-                fill(255);
-                ellipse(this.x+ this.w / 20 , this.y + this.h * 3.5/10, this.w/5);
-                ellipse(this.x+ this.w / 20 , this.y - this.h * 3.5/10, this.w/5);
-                ellipse(this.x + this.w / 20 - this.w * 3.5/10, this.y, this.w/5);
+                textFont(icons);
+                textAlign(CENTER, CENTER);
+                text('\uf0eb', this.x, this.y);
+                break;
+
+            case "modes":
+                // fill(255);
+                noFill();
+                strokeWeight(this.w / 20);
+                stroke(255);
+                this.setLineDash([this.w * 5 / 40, this.w * 5 / 60]); //longer stitches
+                arc(this.x, this.y, this.w * 5 / 6, this.w * 5 / 6, PI / 2, 3 * PI / 2)
+                this.setLineDash([]);
+                arc(this.x, this.y, this.w * 5 / 6, this.w * 5 / 6, 3 * PI / 2, PI / 2)
+                // ellipse(this.x, this.y, this.w * 5 / 6, this.w * 5 / 6);
+
+                push();
+                translate(this.x, this.y);
+                line(0, 0, 0, -this.h / 4);
+                rotate(PI * 7 / 4)
+                line(0, 0, 0, this.h / 4);
+                pop();
+                break;
+            case "enter":
+                textSize(this.w / 1.5);
+                fill(230);
+                noStroke();
+                textFont(icons);
+                textAlign(CENTER, CENTER);
+                text('\uf2f6', this.x, this.y);
                 break;
         }
+    }
+
+
+    this.setLineDash = function (list) {
+        drawingContext.setLineDash(list);
     }
 
     this.touchingMouse = function () {
@@ -251,12 +296,29 @@ function Button(x, y, s, id) {
                     break;
                 case "?":
                     isTutorial = true;
-                    wut = true;
                     // tutorial();
                     break;
                 case "soln":
                     showSolution = true;
-                    wut = true;
+                    break;
+                case "modes":
+                    remainingCountdownFrames = 300;
+                    countingDown = true;
+                    break;
+                case "enter":
+                    let input = prompt("Enter four card numbers separated by spaces").trim().split(" ");
+
+                    while (input.length != 4 || isNaN(parseInt(input[0])) || isNaN(parseInt(input[1])) || isNaN(parseInt(input[2])) || isNaN(parseInt(input[3]))) {
+                        input = prompt("Invalid input. Try again").trim().split(" ");
+                    }
+
+                    let inputInt = []
+
+                    for (let i = 0; i < 4; i++) {
+                        inputInt[i] = parseInt(input[i]);
+                    }
+
+                    newBoard(inputInt);
                     break;
             }
         }

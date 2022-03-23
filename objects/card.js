@@ -32,6 +32,7 @@ function Card(x, y, n, i) {
         }
 
         rectMode(CORNER);
+        textFont('Helvetica');
 
         this.selected = selectedCards.includes(this);
         if (cards[0].n > 23.9999 && cards[0].n < 24.0001 && cards.length == 1) {

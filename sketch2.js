@@ -25,6 +25,13 @@ let selectAfterOperation = false;
 let absoluteValue = false;
 let isTutorial = true;
 let showSolution = false;
+// let showModes = false;
+let remainingCountdownFrames = 0;
+let remainingTimeFrames = 0;
+let countingDown = false;
+let timedMode = false;
+let timedModeScore = 0;
+
 let solutions;
 let ericLink;
 
@@ -44,6 +51,7 @@ function preload() {
         cardSounds.push(loadSound('sounds/cardsound' + i + '.mp3'));
     }
     buttonSound = loadSound('sounds/buttonsound.mp3');
+    icons = loadFont("fa.otf");
 }
 
 function setup() {
@@ -79,7 +87,7 @@ function initialize() {
     ericLink = createA('https://github.com/ericx1e', 'made by Eric Xie', '_blank');
     ericLink.style('font-size', (height / 90 + width / 70) + 'px');
     ericLink.style('color', '#ff0000');
-    ericLink.position(width / 2 - 6.5 * (height / 90 + width / 70)/2, height / 2 + height * 9.5 / 25);
+    ericLink.position(width / 2 - 6.5 * (height / 90 + width / 70) / 2, height / 2 + height * 9.5 / 25);
     ericLink.hide();
 
     menuW = (2 * width + 2 * height) / 10;
@@ -92,7 +100,9 @@ function initialize() {
         buttons.push(new Button(width - buttonPanelH * (buttonIds.length - 0.5) + buttonPanelH * i, buttonPanelH / 2, buttonPanelH * 4 / 5, buttonIds[i]));
     }
     buttons.push(new Button(buttonPanelH / 2, height - buttonPanelH / 2, buttonPanelH / 2, "?"));
-    buttons.push(new Button(buttonPanelH * 5 / 4, height -  buttonPanelH / 2, buttonPanelH/2, "soln"));
+    buttons.push(new Button(buttonPanelH * 5 / 4, height - buttonPanelH / 2, buttonPanelH / 2, "soln"));
+    // buttons.push(new Button(buttonPanelH * 8 / 4, height -  buttonPanelH / 2, buttonPanelH/2, "modes"));
+    buttons.push(new Button(buttonPanelH * 8 / 4, height - buttonPanelH / 2, buttonPanelH / 2, "enter"));
 
 
     menuSlidingButton = [];
@@ -160,6 +170,43 @@ function draw() {
         button.show();
     });
 
+    if (countingDown) {
+        cards = [];
+        fill(255);
+        noStroke();
+        textAlign(CENTER, CENTER);
+        textSize(width / 12 + height / 8);
+        let tx = "" + Math.floor((remainingCountdownFrames / 60) * 100) / 100;
+        for (let i = 0; i < 4 - tx.length; i++) {
+            tx += "0";
+        }
+        text(tx, width / 2, height / 2);
+        remainingCountdownFrames--;
+        if (remainingCountdownFrames <= 0) {
+            remainingCountdownFrames = 0;
+            countingDown = false;
+            remainingTimeFrames = 2 * 60 * 60; //two minutes
+            timedModeScore = 0;
+            timedMode = true;
+            newBoard();
+        }
+    }
+
+    if (timedMode) {
+        fill(220);
+        noStroke();
+        textAlign(RIGHT, CENTER);
+        let ts = width / 24 + height / 12;
+        textSize(ts);
+        let seconds = "" + Math.floor((remainingTimeFrames / 60) * 100) / 100;
+        text(Math.floor(seconds / 60) + ":" + (Math.floor(seconds % 60) < 10 ? "0" : "") + Math.floor(seconds % 60), width - ts / 1.5, height - ts);
+        remainingTimeFrames--;
+        if (remainingTimeFrames <= 0) {
+            remainingTimeFrames = 0;
+            timedMode = false;
+            newBoard();
+        }
+    }
 
 
     //Button panel
@@ -226,13 +273,13 @@ function draw() {
         txt = "";
         for (let i = 0; i < 5; i++) {
             for (let j = 0; j < 10; j++) {
-                if(10 * i + j >= solutions.length) {
+                if (10 * i + j >= solutions.length) {
                     done = true;
                     break;
                 }
-                txt += solutions[10*i+j] + ' ';
+                txt += solutions[10 * i + j] + ' ';
             }
-            if(done) {
+            if (done) {
                 break;
             }
         }
@@ -253,20 +300,9 @@ function draw() {
     line(mouseX, mouseY, pmouseX, pmouseY);
 }
 
-let wut = false;
-
 function touchStarted() {
-    if (isTutorial || showSolution) {
+    if (isTutorial || showSolution || countingDown) {
         return;
-    }
-    buttons.forEach(button => {
-        button.update();
-    });
-
-    if (menuOpen) {
-        menuSlidingButton.forEach(button => {
-            button.click();
-        });
     }
 
     if (menuOpen) {
@@ -299,15 +335,26 @@ function touchStarted() {
 }
 
 function touchEnded() {
-    if (isTutorial && !wut) {
+    if (isTutorial) {
         isTutorial = false;
         return;
     }
-    if(showSolution && !wut) {
+    if (showSolution) {
         showSolution = false;
         return;
     }
-    wut = false; //basically this makes the menu not close from the mouse release on the button
+
+
+    buttons.forEach(button => {
+        button.update();
+    });
+
+
+    if (menuOpen) {
+        menuSlidingButton.forEach(button => {
+            button.click();
+        });
+    }
 
     let flag = false;
     for (let i = cards.length - 1; i >= 0; i--) {
@@ -550,7 +597,7 @@ function playCardSound() {
     cardSounds[Math.floor(random(0, cardSounds.length))].play();
 }
 
-function newBoard() {
+function newBoard(input) {
     dealSound.play();
     confetti = [];
     prevBoard = [];
@@ -571,11 +618,15 @@ function newBoard() {
                 randX = random(0, width - w);
                 randY = random(buttonPanelH, height - h);
             }
-            cards.push(new Card(randX, randY, Math.floor(random(1, 14)), i + 1));
+            if (input) {
+                cards.push(new Card(randX, randY, input[i], i + 1));
+            } else {
+                cards.push(new Card(randX, randY, Math.floor(random(1, 14)), i + 1));
+            }
         }
         // cards = [new Card(100, 100, 8, 1), new Card(200, 100, 6, 2), new Card(300, 100, 2, 3), new Card(400, 100, 10, 4)];
 
-        if (allPossible) {
+        if (allPossible && !input) {
             while (checkPossible().length == 0) {
                 cards = [];
                 for (let i = 0; i < 4; i++) {
@@ -595,9 +646,13 @@ function newBoard() {
         for (let i = 0; i < 4; i++) {
             let h = (width + height) / 10;
             let w = h / 7 * 5;
-            cards.push(new Card(width / 8 * i + width / 4 + (width / 8 - w) / 2, height / 2 + buttonPanelH / 2 - h / 2, Math.floor(random(1, 14)), i + 1));
+            if (input) {
+                cards.push(new Card(width / 8 * i + width / 4 + (width / 8 - w) / 2, height / 2 + buttonPanelH / 2 - h / 2, input[i], i + 1));
+            } else {
+                cards.push(new Card(width / 8 * i + width / 4 + (width / 8 - w) / 2, height / 2 + buttonPanelH / 2 - h / 2, Math.floor(random(1, 14)), i + 1));
+            }
         }
-        if (allPossible) {
+        if (allPossible && !input) {
             while (checkPossible().length == 0) {
                 cards = [];
                 for (let i = 0; i < 4; i++) {
@@ -661,13 +716,18 @@ function locationTaken(x, y) {
 
 function scorePoint() {
     partySound.play();
-    score++;
-    if (isConfetti) {
-        for (let i = 0; i < 150; i++) {
-            confetti[i] = new Confetti(random(0, width), random(height / 2, height * 2), -height / 7);
-        }
-    } else {
+    if (timedMode) {
+        timedModeScore++;
         newBoard();
+    } else {
+        score++;
+        if (isConfetti) {
+            for (let i = 0; i < 150; i++) {
+                confetti[i] = new Confetti(random(0, width), random(height / 2, height * 2), -height / 7);
+            }
+        } else {
+            newBoard();
+        }
     }
 
 }
