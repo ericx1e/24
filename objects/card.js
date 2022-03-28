@@ -122,7 +122,7 @@ function Card(x, y, n, i) {
     }
 
     this.update = function () {
-        if (isTutorial) {
+        if (popup) {
             return;
         }
         if (this.lifted) {

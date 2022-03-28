@@ -45,11 +45,14 @@ function Button(x, y, s, id) {
             case "enter":
                 fill(170);
                 break;
+            case "preset":
+                fill(170);
+                break;
         }
 
         noStroke();
 
-        if (this.id == "?" || this.id == "soln" || this.id == "modes" || this.id == "enter") {
+        if (this.id == "?" || this.id == "soln" || this.id == "modes" || this.id == "enter" || this.id == "preset") {
             ellipse(this.x, this.y, this.w);
         } else {
             rect(this.x, this.y, this.w, this.h, this.w / 3);
@@ -170,6 +173,14 @@ function Button(x, y, s, id) {
                 textFont(icons);
                 textAlign(CENTER, CENTER);
                 text('\uf2f6', this.x, this.y);
+                break;
+            case "preset":
+                textSize(this.w / 1.5);
+                fill(230);
+                noStroke();
+                textFont(icons);
+                textAlign(CENTER, CENTER);
+                text('\uf58d', this.x, this.y);
                 break;
         }
     }
@@ -295,18 +306,27 @@ function Button(x, y, s, id) {
                     toggleMenu();
                     break;
                 case "?":
-                    isTutorial = true;
+                    // isTutorial = true;
+                    popup = new Popup("tutorial");
                     // tutorial();
                     break;
                 case "soln":
-                    showSolution = true;
+                    popup = new Popup("solution");
                     break;
                 case "modes":
                     remainingCountdownFrames = 300;
                     countingDown = true;
                     break;
                 case "enter":
-                    let input = prompt("Enter four card numbers separated by spaces").trim().split(" ");
+                    let input;
+                    try {
+                        input = prompt("Enter four card numbers separated by spaces").trim().split(" ");
+                    } catch {
+                        input = "";
+                    }
+                    if (input == "") {
+                        break;
+                    }
 
                     while (input.length != 4 || isNaN(parseInt(input[0])) || isNaN(parseInt(input[1])) || isNaN(parseInt(input[2])) || isNaN(parseInt(input[3]))) {
                         input = prompt("Invalid input. Try again").trim().split(" ");
@@ -319,6 +339,9 @@ function Button(x, y, s, id) {
                     }
 
                     newBoard(inputInt);
+                    break;
+                case "preset":
+                    popup = new Popup("preset");
                     break;
             }
         }

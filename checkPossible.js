@@ -1676,13 +1676,21 @@ function checkPossible() {
 
     let allSolutions = [];
 
+    let solnSet = new Set();
+
     for (let i = 0; i < workingP.length; i++) {
         // console.log(workingP[i], workingI[i], workingA[i], workingB[i], workingC[i]);
         // if (equationString(workingP[i], workingI[i], workingA[i], workingB[i], workingC[i]) == equationString(workingP[i + 1], workingI[i + 1], workingA[i + 1], workingB[i + 1], workingC[i + 1])) {
-        allSolutions.push(equationString(workingP[i], workingI[i], workingA[i], workingB[i], workingC[i]));
+
+        // allSolutions.push(equationString(workingP[i], workingI[i], workingA[i], workingB[i], workingC[i]));
+        solnSet.add(equationString(workingP[i], workingI[i], workingA[i], workingB[i], workingC[i]));
         // }
     }
-    
+
+    solnSet.forEach(solution => {
+        allSolutions.push(solution);
+    });
+
     return allSolutions;
 }
 

@@ -23,8 +23,6 @@ let isConfetti = true;
 let faceNumbers = true;
 let selectAfterOperation = false;
 let absoluteValue = false;
-let isTutorial = true;
-let showSolution = false;
 // let showModes = false;
 let remainingCountdownFrames = 0;
 let remainingTimeFrames = 0;
@@ -43,6 +41,9 @@ let cardSounds = [];
 let partySound;
 let buttonSound;
 
+let popup;
+let presets;
+
 function preload() {
     dealSound = loadSound('sounds/carddeal.mp3');
     partySound = loadSound('sounds/partyhorn.mp3');
@@ -52,6 +53,7 @@ function preload() {
     }
     buttonSound = loadSound('sounds/buttonsound.mp3');
     icons = loadFont("fa.otf");
+    presets = loadStrings('presets.txt');
 }
 
 function setup() {
@@ -99,10 +101,14 @@ function initialize() {
     for (let i = 0; i < buttonIds.length; i++) {
         buttons.push(new Button(width - buttonPanelH * (buttonIds.length - 0.5) + buttonPanelH * i, buttonPanelH / 2, buttonPanelH * 4 / 5, buttonIds[i]));
     }
-    buttons.push(new Button(buttonPanelH / 2, height - buttonPanelH / 2, buttonPanelH / 2, "?"));
-    buttons.push(new Button(buttonPanelH * 5 / 4, height - buttonPanelH / 2, buttonPanelH / 2, "soln"));
+
+    lowerButtonScale = height / 20;
+
+    buttons.push(new Button(lowerButtonScale, height - lowerButtonScale, lowerButtonScale, "?"));
+    buttons.push(new Button(lowerButtonScale * 2.5, height - lowerButtonScale, lowerButtonScale, "soln"));
     // buttons.push(new Button(buttonPanelH * 8 / 4, height -  buttonPanelH / 2, buttonPanelH/2, "modes"));
-    buttons.push(new Button(buttonPanelH * 8 / 4, height - buttonPanelH / 2, buttonPanelH / 2, "enter"));
+    buttons.push(new Button(lowerButtonScale * 4, height - lowerButtonScale, lowerButtonScale, "enter"));
+    buttons.push(new Button(lowerButtonScale * 5.5, height - lowerButtonScale, lowerButtonScale, "preset"));
 
 
     menuSlidingButton = [];
@@ -120,6 +126,10 @@ function initialize() {
 
     for (let i = 0; i < cards.length; i++) {
         cards[i] = new Card(Math.min(cards[i].x, width - cards[i].w), Math.min(cards[i].y, height - cards[i].h), cards[i].n, cards[i].i);
+    }
+
+    if (popup) {
+        popup = new Popup(popup.id);
     }
 
     // newBoard();
@@ -239,56 +249,13 @@ function draw() {
     if (confetti.length < 75 && confetti.length > 0) {
         newBoard();
     }
-    if (isTutorial) {
-        ericLink.show();
-        rectMode(CENTER);
-        noStroke();
-        fill(0, 200);
-        rect(width / 2, height / 2, width * 9.5 / 10, height * 9.5 / 10, width * 9 / 200);
-        fill(255);
-        textAlign(CENTER, TOP);
-        textSize(height / 80 + width / 30);
-        textFont("Monospace");
-        textWrap(WORD);
-        text("welcome to 24 the game!", width / 2, height / 2 - height * 9.5 / 22, width * 9.5 / 11);
-        textSize(height / 60 + width / 90);
-        text("\n\n\nthe objective of the game is to use all the cards to create 24\nyou must use all four cards and only be left with the 24 card\nclick on cards or use ('1', '2', '3', '4') keys to select them\nonce you have two cards selected, choose an operation to combine them\naddition-('a','+','left')\tmultiplication-('m','*','right')\nsubtraction-('s','-','up')\tdivision-('d','/','down')\nundo-('u')\treset-('r')\tnext-('n')\n\n\n(click anywhere to close)", width / 2, height / 2 - height * 9.5 / 22, width * 9.5 / 11);
 
-
-        textFont('Helvetica');
-    } else {
-        ericLink.hide();
-    }
-
-    if (showSolution) {
-        rectMode(CENTER);
-        noStroke();
-        fill(0, 200);
-        rect(width / 2, height / 2, width * 9.5 / 10, height * 9.5 / 10, width * 9 / 200);
-        fill(255);
-        textAlign(CENTER, TOP);
-        textSize(width / 20);
-        textFont("Monospace");
-        let done = false;
-        txt = "";
-        for (let i = 0; i < 5; i++) {
-            for (let j = 0; j < 10; j++) {
-                if (10 * i + j >= solutions.length) {
-                    done = true;
-                    break;
-                }
-                txt += solutions[10 * i + j] + ' ';
-            }
-            if (done) {
-                break;
-            }
-        }
-        textSize(height / 60 + width / 90);
-        text("solutions\n\n" + txt + "\n\n\n(click anywhere to close)", width / 2, height / 2 - height * 9.5 / 22, width * 9.5 / 11);
-        textFont('Helvetica');
+    if (popup) {
+        popup.show();
     }
 
     noCursor();
+    strokeCap(ROUND)
     if (mouseIsPressed) {
         stroke(255, 50, 50);
         strokeWeight(15);
@@ -301,9 +268,9 @@ function draw() {
 }
 
 function touchStarted() {
-    if (isTutorial || showSolution || countingDown) {
-        return;
-    }
+    // if (isTutorial || showSolution || countingDown) {
+    //     return;
+    // }
 
     if (menuOpen) {
         if (mouseX < width - menuW) {
@@ -335,12 +302,8 @@ function touchStarted() {
 }
 
 function touchEnded() {
-    if (isTutorial) {
-        isTutorial = false;
-        return;
-    }
-    if (showSolution) {
-        showSolution = false;
+    if (popup) {
+        popup.onClick();
         return;
     }
 
@@ -412,9 +375,9 @@ function keyReleased() {
 
 
 function keyTyped() {
-    if (isTutorial) {
-        return;
-    }
+    // if (popup) {
+    //     return;
+    // }
     if (key == ' ') {
     }
 
