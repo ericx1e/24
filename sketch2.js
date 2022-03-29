@@ -102,7 +102,7 @@ function initialize() {
         buttons.push(new Button(width - buttonPanelH * (buttonIds.length - 0.5) + buttonPanelH * i, buttonPanelH / 2, buttonPanelH * 4 / 5, buttonIds[i]));
     }
 
-    lowerButtonScale = height / 20;
+    lowerButtonScale = height / 20 + width / 100;
 
     buttons.push(new Button(lowerButtonScale, height - lowerButtonScale, lowerButtonScale, "?"));
     buttons.push(new Button(lowerButtonScale * 2.5, height - lowerButtonScale, lowerButtonScale, "soln"));

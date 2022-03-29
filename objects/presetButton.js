@@ -19,6 +19,7 @@ function PresetButton(x, y, s, nums) {
         line(this.x - this.w / 2, this.y, this.x + this.w / 2, this.y);
         textAlign(CENTER, CENTER);
         textFont('Helvetica');
+        textSize(this.s / 3);
         noStroke();
         text(nums[0], this.x - this.w / 4, this.y - this.h / 4);
         text(nums[1], this.x + this.w / 4, this.y - this.h / 4);

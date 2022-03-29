@@ -45,38 +45,40 @@ function Card(x, y, n, i) {
             fill(17, 100);
             rect(this.x, this.y, this.w, this.h, this.w / 5);
             if (this.selected) {
-                strokeWeight(5);
+                strokeWeight(this.w / 20);
                 stroke(255, 50, 50);
             } else {
-                strokeWeight(2);
-                stroke(17);
+                strokeWeight(this.w / 60);
+                stroke(51);
+                // noStroke();
             }
             fill(255);
-            rect(this.x + 5, this.y - 3, this.w, this.h, this.w / 5);
+            rect(this.x + this.w * 0.03, this.y - this.w * 0.03, this.w, this.h, this.w / 5);
             fill(255, 100, 100);
             noStroke();
             textSize(this.w / 2);
             textAlign(CENTER, CENTER)
-            text(tx, this.x + 5 + this.w / 2, this.y - 3 + this.h / 2);
+            text(tx, this.x + this.w * 0.03 + this.w / 2, this.y - this.w * 0.03 + this.h / 2);
 
             noStroke();
             fill(200);
             textSize(this.w / 5);
-            text(i, this.x + 4 * this.w / 5 + 5, this.y + this.w / 5 - 3);
+            text(i, this.x + 4 * this.w / 5 + this.w * 0.03, this.y + this.w / 5 - this.w * 0.03);
 
             if (this.selected) {
                 noStroke();
                 fill(255, 50, 50);
                 textSize(this.w / 5);
-                text(selectedCards.indexOf(this) + 1, this.x + 5 + this.w / 5, this.y - 3 + this.w / 5);
+                text(selectedCards.indexOf(this) + 1, this.x + this.w * 0.03 + this.w / 5, this.y - this.w * 0.03 + this.w / 5);
             }
         } else {
             if (this.selected) {
-                strokeWeight(5);
+                strokeWeight(this.w / 20);
                 stroke(255, 50, 50);
             } else {
-                strokeWeight(2);
-                stroke(17);
+                strokeWeight(this.w / 60);
+                stroke(51);
+                // noStroke();
             }
             if (cards[0].n > 23.9999 && cards[0].n < 24.0001 && cards.length == 1) {
                 for (let i = 0; i < 20; i++) {
