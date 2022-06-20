@@ -231,8 +231,13 @@ function draw() {
     text(score, buttonPanelH / 2, buttonPanelH / 2);
 
 
+    let hoveringButton = false;
+
     buttons.forEach(button => {
         button.show();
+        if(!hoveringButton && button.touchingMouse()) {
+            hoveringButton = true;
+        }
     });
 
     confetti.forEach(c => {
@@ -254,6 +259,17 @@ function draw() {
         popup.show();
     }
 
+    // if(hoveringButton) {
+    //     cursor('pointer', 16, 16);
+    // } else {
+        if(mouseIsPressed) {
+            cursor('grabbing');
+        } else {
+            cursor('grab');
+        }
+    // }
+
+    /*
     noCursor();
     strokeCap(ROUND)
     if (mouseIsPressed) {
@@ -265,6 +281,7 @@ function draw() {
     }
 
     line(mouseX, mouseY, pmouseX, pmouseY);
+    */
 }
 
 function touchStarted() {
