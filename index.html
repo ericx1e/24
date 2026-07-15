@@ -1,21 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-    <link rel="icon" type="image/x-icon" href="favicon_io/android-chrome-512x512.png">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="icon" type="image/x-icon" href="favicon_io/android-chrome-512x512.png">
   <title>24 - Card Game and Solver</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-TJL95PPEJZ"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-  
+
     gtag('config', 'G-TJL95PPEJZ');
   </script>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #0a241a;
+      font-family: 'Nunito', Helvetica, sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    canvas {
+      display: block;
+      touch-action: none;
+    }
+  </style>
 </head>
 
 <body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script>
+  <script src="objects/theme.js"></script>
+  <script src="objects/difficulty.js"></script>
   <script src="sketch2.js"></script>
   <script src="checkPossible.js"></script>
   <script src="objects/confetti.js"></script>
@@ -26,11 +52,4 @@
   <script src="objects/presetButton.js"></script>
 </body>
 
-<!-- <style>
-    html, body {
-  overflow-x: hidden;
-}
-body {
-  position: relative;
-}
-</style> -->
+</html>

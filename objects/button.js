@@ -4,64 +4,63 @@ function Button(x, y, s, id) {
     this.w = s;
     this.h = s;
     this.id = id;
+    this.hoverT = 0;
+    this.isOp = id == "add" || id == "sub" || id == "mult" || id == "div";
+    this.isUtility = id == "undo" || id == "reset" || id == "next" || id == "menu";
+    this.enableT = this.isOp ? 0 : 1;
+
+    this.label = {
+        add: 'add (a)',
+        sub: 'subtract (s)',
+        mult: 'multiply (m)',
+        div: 'divide (d)',
+        undo: 'undo (u)',
+        reset: 'reset (r)',
+        next: 'new cards (n)',
+        menu: 'settings',
+        '?': 'how to play',
+        soln: 'solutions',
+        enter: 'enter your own cards',
+        preset: 'challenge sets',
+    }[id];
 
     this.show = function () {
+        let enabled = !this.isOp || selectedCards.length == 2;
+        this.enableT = lerp(this.enableT, enabled ? 1 : 0, 0.18);
+        let bump = this.enableT * (1 - this.enableT) * 4; // peaks mid-transition
+
+        let hov = this.touchingMouse() && !popup;
+        this.hoverT = lerp(this.hoverT, hov ? 1 : 0, 0.25);
+        let sc = (1 + 0.1 * this.hoverT - (hov && mouseIsPressed ? 0.12 : 0)) * (1 + 0.06 * bump);
+
+        push();
+        translate(this.x, this.y);
+        scale(sc);
+        translate(-this.x, -this.y);
         rectMode(CENTER);
-
-        switch (this.id) {
-            case "add":
-                fill(255, 100, 100);
-                break;
-            case "sub":
-                fill(100, 100, 255);
-                break;
-            case "mult":
-                fill(100, 255, 100);
-                break;
-            case "div":
-                fill(255, 100, 255);
-                break;
-            case "undo":
-                fill(200);
-                break;
-            case "reset":
-                fill(200);
-                break;
-            case "next":
-                fill(200);
-                break;
-            case "menu":
-                fill(250);
-                break;
-            case "?":
-                fill(170);
-                break;
-            case "soln":
-                fill(170);
-                break;
-            case "modes":
-                fill(170);
-                break;
-            case "enter":
-                fill(170);
-                break;
-            case "preset":
-                fill(170);
-                break;
-        }
-
         noStroke();
 
-        if (this.id == "?" || this.id == "soln" || this.id == "modes" || this.id == "enter" || this.id == "preset") {
-            ellipse(this.x, this.y, this.w);
-        } else {
+        if (this.isOp) {
+            let muted = color(255, 255, 255, 22);
+            fill(lerpColor(muted, color(PALETTE[this.id]), this.enableT));
+            setShadow('rgba(0,0,0,' + 0.3 * this.enableT + ')', this.w / 6 + this.hoverT * this.w / 8, this.w / 30);
             rect(this.x, this.y, this.w, this.h, this.w / 3);
+            clearShadow();
+        } else if (this.isUtility) {
+            fill(255, 255, 255, 12 + 32 * this.hoverT);
+            rect(this.x, this.y, this.w, this.h, this.w / 3);
+        } else {
+            fill(255, 255, 255, 30 + 25 * this.hoverT);
+            setShadow('rgba(0,0,0,0.3)', this.w / 6 + this.hoverT * this.w / 8, this.w / 30);
+            ellipse(this.x, this.y, this.w);
+            clearShadow();
         }
 
-        fill(255);
+        let iconA = this.isOp ? 150 + 105 * this.enableT : 255;
+        fill(255, iconA);
         textAlign(CENTER, CENTER);
         strokeCap(ROUND);
-        stroke(255);
+        stroke(255, iconA);
         strokeWeight(this.w / 10);
         switch (this.id) {
             case "add":
@@ -102,54 +101,29 @@ function Button(x, y, s, id) {
                 break;
             case "menu":
                 noStroke();
-                stroke(200);
-                strokeWeight(this.w / 100);
-                fill(200);
+                fill(235);
                 textAlign(CENTER, CENTER);
                 textFont(icons);
                 textSize(this.w / 1.5);
-                text('\uf1de', this.x, this.y);
-                // line(this.x - this.w / 4, this.y - this.h / 6, this.x + this.w / 4, this.y - this.h / 6);
-                // line(this.x - this.w / 4, this.y, this.x + this.w / 4, this.y);
-                // line(this.x - this.w / 4, this.y + this.h / 6, this.x + this.w / 4, this.y + this.h / 6);
+                text('', this.x, this.y);
                 break;
             case "?":
                 textSize(this.w / 1.5);
-                fill(230);
+                fill(235);
                 noStroke();
                 textFont(icons);
                 textAlign(CENTER, CENTER);
-                text('\uf129', this.x, this.y);
-                // text('?', this.x, this.y);
-                // if(this.touchingMouse()) {
-                //     fill(255);
-                //     text("show instructions", mouseX, mouseY);
-                // }
+                text('', this.x, this.y);
                 break;
-
             case "soln":
-
-                // fill(255);
-                // noStroke();
-                // rectMode(CENTER);
-                // rect(this.x + this.w / 20, this.y, this.w * 3.5 / 6, this.h * 3.5 / 6, this.w / 10);
-                // fill(170);
-                // ellipse(this.x + this.w / 20 + this.w * 3.5 / 15, this.y, this.w / 5);
-                // fill(255);
-                // ellipse(this.x + this.w / 20, this.y + this.h * 3.5 / 10, this.w / 5);
-                // ellipse(this.x + this.w / 20, this.y - this.h * 3.5 / 10, this.w / 5);
-                // ellipse(this.x + this.w / 20 - this.w * 3.5 / 10, this.y, this.w / 5);
-
                 textSize(this.w / 1.5);
-                fill(230);
+                fill(235);
                 noStroke();
                 textFont(icons);
                 textAlign(CENTER, CENTER);
-                text('\uf0eb', this.x, this.y);
+                text('', this.x, this.y);
                 break;
-
             case "modes":
-                // fill(255);
                 noFill();
                 strokeWeight(this.w / 20);
                 stroke(255);
@@ -157,8 +131,6 @@ function Button(x, y, s, id) {
                 arc(this.x, this.y, this.w * 5 / 6, this.w * 5 / 6, PI / 2, 3 * PI / 2)
                 this.setLineDash([]);
                 arc(this.x, this.y, this.w * 5 / 6, this.w * 5 / 6, 3 * PI / 2, PI / 2)
-                // ellipse(this.x, this.y, this.w * 5 / 6, this.w * 5 / 6);
-
                 push();
                 translate(this.x, this.y);
                 line(0, 0, 0, -this.h / 4);
@@ -168,20 +140,44 @@ function Button(x, y, s, id) {
                 break;
             case "enter":
                 textSize(this.w / 1.5);
-                fill(230);
+                fill(235);
                 noStroke();
                 textFont(icons);
                 textAlign(CENTER, CENTER);
-                text('\uf2f6', this.x, this.y);
+                text('', this.x, this.y);
                 break;
             case "preset":
                 textSize(this.w / 1.5);
-                fill(230);
+                fill(235);
                 noStroke();
                 textFont(icons);
                 textAlign(CENTER, CENTER);
-                text('\uf58d', this.x, this.y);
+                text('', this.x, this.y);
                 break;
+        }
+        pop();
+
+        // tooltip
+        let lbl = this.label;
+        if (this.isOp && selectedCards.length != 2) {
+            lbl = 'select two cards first';
+        }
+        if (lbl && this.hoverT > 0.6 && !popup) {
+            let a = (this.hoverT - 0.6) / 0.4;
+            textFont(UI_FONT);
+            textStyle(BOLD);
+            let th = constrain(this.w / 3, 18, 26);
+            textSize(th * 0.55);
+            let tw = textWidth(lbl);
+            let ty = this.y < height / 2 ? this.y + this.h / 2 + th : this.y - this.h / 2 - th;
+            rectMode(CENTER);
+            noStroke();
+            fill(0, 0, 0, 200 * a);
+            rect(this.x, ty, tw + th, th, th / 2);
+            fill(255, 255 * a);
+            textAlign(CENTER, CENTER);
+            text(lbl, this.x, ty);
+            textStyle(NORMAL);
         }
     }
 
@@ -197,88 +193,19 @@ function Button(x, y, s, id) {
     this.update = function () {
         if (this.touchingMouse()) {
             buttonSound.play();
-            if (selectedCards.length == 2) {
-                let i = Math.min(selectedCards[0].i, selectedCards[1].i);
-                switch (this.id) {
-                    case "add":
-                        prevCards = [];
-                        cards.forEach(card => {
-                            prevCards.push(card);
-                        });
-                        newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n + selectedCards[1].n, i);
-                        cards.push(newCard);
-                        cards.splice(cards.indexOf(selectedCards[0]), 1);
-                        cards.splice(cards.indexOf(selectedCards[1]), 1);
-                        selectedCards = [];
-                        if (selectAfterOperation) {
-                            selectedCards.push(newCard);
-                        }
-                        break;
-                    case "sub":
-                        prevCards = [];
-                        cards.forEach(card => {
-                            prevCards.push(card);
-                        });
-                        if (absoluteValue) {
-                            newCard = new Card(selectedCards[1].x, selectedCards[1].y, Math.abs(selectedCards[0].n - selectedCards[1].n), i);
-                        } else {
-                            newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n - selectedCards[1].n, i);
-                        }
-                        cards.push(newCard);
-                        cards.splice(cards.indexOf(selectedCards[0]), 1);
-                        cards.splice(cards.indexOf(selectedCards[1]), 1);
-                        selectedCards = [];
-                        if (selectAfterOperation) {
-                            selectedCards.push(newCard);
-                        }
-                        break;
-                    case "mult":
-                        prevCards = [];
-                        cards.forEach(card => {
-                            prevCards.push(card);
-                        });
-                        newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n * selectedCards[1].n, i);
-                        cards.push(newCard);
-                        cards.splice(cards.indexOf(selectedCards[0]), 1);
-                        cards.splice(cards.indexOf(selectedCards[1]), 1);
-                        selectedCards = [];
-                        if (selectAfterOperation) {
-                            selectedCards.push(newCard);
-                        }
-                        break;
-                    case "div":
-                        prevCards = [];
-                        cards.forEach(card => {
-                            prevCards.push(card);
-                        });
-                        if (absoluteValue) {
-                            if (selectedCards[0].n >= selectedCards[1].n) {
-                                newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n / selectedCards[1].n, i);
-                            } else {
-                                newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[1].n / selectedCards[0].n, i);
-                            }
-                        } else {
-                            newCard = new Card(selectedCards[1].x, selectedCards[1].y, selectedCards[0].n / selectedCards[1].n, i);
-                        }
-                        cards.push(newCard);
-                        cards.splice(cards.indexOf(selectedCards[0]), 1);
-                        cards.splice(cards.indexOf(selectedCards[1]), 1);
-                        selectedCards = [];
-                        if (selectAfterOperation) {
-                            selectedCards.push(newCard);
-                        }
-                        break;
-                }
-
-                if (cards.length == 1) {
-                    if (cards[0].n == 24) {
-                        scorePoint();
-                        // score++;
-                        // newBoard();
-                    }
-                }
-            }
             switch (this.id) {
+                case "add":
+                    applyOperation('add');
+                    break;
+                case "sub":
+                    applyOperation('sub');
+                    break;
+                case "mult":
+                    applyOperation('mult');
+                    break;
+                case "div":
+                    applyOperation('div');
+                    break;
                 case "undo":
                     if (cards.length == 1 && cards[0].n > 23.9999 && cards[0].n < 24.0001) {
                         break;
@@ -306,9 +233,7 @@ function Button(x, y, s, id) {
                     toggleMenu();
                     break;
                 case "?":
-                    // isTutorial = true;
                     popup = new Popup("tutorial");
-                    // tutorial();
                     break;
                 case "soln":
                     popup = new Popup("solution");
@@ -318,27 +243,7 @@ function Button(x, y, s, id) {
                     countingDown = true;
                     break;
                 case "enter":
-                    let input;
-                    try {
-                        input = prompt("Enter four card numbers separated by spaces").trim().split(" ");
-                    } catch {
-                        input = "";
-                    }
-                    if (input == "") {
-                        break;
-                    }
-
-                    while (input.length != 4 || isNaN(parseInt(input[0])) || isNaN(parseInt(input[1])) || isNaN(parseInt(input[2])) || isNaN(parseInt(input[3]))) {
-                        input = prompt("Invalid input. Try again").trim().split(" ");
-                    }
-
-                    let inputInt = []
-
-                    for (let i = 0; i < 4; i++) {
-                        inputInt[i] = parseInt(input[i]);
-                    }
-
-                    newBoard(inputInt);
+                    popup = new Popup("enter");
                     break;
                 case "preset":
                     popup = new Popup("preset");
